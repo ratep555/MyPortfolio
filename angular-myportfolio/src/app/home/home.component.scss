@@ -1,0 +1,10 @@
+.featured {
+    height: 100px;
+}
+@media (min-width: 576px) {
+img {
+    object-fit: cover;
+    height: 700px;
+    width: 100%;
+}
+}

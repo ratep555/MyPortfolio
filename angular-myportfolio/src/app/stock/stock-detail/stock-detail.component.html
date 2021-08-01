@@ -1,0 +1,163 @@
+<div *ngIf="stock">
+    <div class="miki container-fluid" style="margin-top: 200px;">         
+        <div class="row center">
+            <div class="col-lg-12">
+                <table class="table table-bordered table-striped table-condensed table-hover ml-4" 
+                style="width: 47%; float: left">
+                <thead>
+                    <tr>
+                        <th>
+                          Company Name
+                        </th>
+                        <th>
+                           {{stock.companyName}}
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>
+                          Symbol
+                        </th>
+                        <th>
+                      {{stock.symbol}}
+                  </th>
+                  </tr>
+                    <tr>
+                        <th>
+                          Current Price
+                        </th>
+                        <th>
+                      {{stock.currentPrice}}
+                  </th>
+                  </tr>
+                    <tr>
+                        <th>
+                          Category
+                        </th>
+                        <th>
+                      {{stock.category}}
+                  </th>
+                  </tr>
+                    <tr>
+                        <th>
+                          Shares Outstanding
+                        </th>
+                        <th>
+                      {{stock.sharesOutstanding}}
+                  </th>
+                  </tr>
+                    <tr>
+                        <th>
+                          Own Shares
+                        </th>
+                        <th>
+                      {{stock.ownShares}}
+                  </th>
+                  </tr>
+                    <tr>
+                        <th>
+                          Market Cap
+                        </th>
+                        <th>
+                      {{stock.sharesOutstanding * stock.currentPrice}}
+                  </th>
+                  </tr>
+                    <tr>
+                        <th>
+                          Dividend
+                        </th>
+                        <th>
+                      {{stock.dividend}}
+                  </th>
+                  </tr>
+                    <tr>
+                        <th>
+                          Dividend Yield
+                        </th>
+                        <th>
+                      {{((stock.dividend / stock.currentPrice) * 100) | number : '1.2-2'}} %
+                  </th>
+                  </tr>
+                </thead>
+                </table>
+                <table class="table table-bordered table-striped table-condensed table-hover mr-4" 
+                style="width: 47%; float: right">
+                <thead>
+                    <tr>
+                        <th>
+                          Revenue
+                        </th>
+                        <th>
+                           {{stock.revenue}}
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>
+                          Expenditure
+                        </th>
+                        <th>
+                      {{stock.expenditure}}
+                  </th>
+                  </tr>
+                    <tr>
+                        <th>
+                          Gross Profit
+                        </th>
+                        <th>
+                      {{(stock.revenue) - (stock.expenditure)}}
+                  </th>
+                  </tr>
+                    <tr>
+                        <th>
+                          Enterprise Value
+                        </th>
+                        <th>
+                      {{stock.enterpriseValue}}
+                  </th>
+                  </tr>
+                    <tr>
+                        <th>
+                          Book Value per Share (BVPS)
+                        </th>
+                        <th>
+                      {{((stock?.enterpriseValue) / (stock?.sharesOutstanding)) | number : '1.2-2'}}
+                  </th>
+                  </tr>
+                    <tr>
+                        <th>
+                          Price/Book (P/B)
+                        </th>
+                        <th>
+                      {{((stock?.currentPrice) / ((stock.enterpriseValue) / (stock.sharesOutstanding))) | number : '1.2-2'}}
+                  </th>
+                  </tr>
+                    <tr>
+                        <th>
+                          Earnings per Share
+                        </th>
+                        <th>
+                            {{(((stock.revenue) - (stock.expenditure)) / (stock.sharesOutstanding)) | number : '1.2-2'}}
+                        </th>
+                  </tr>
+                    <tr>
+                        <th>
+                          Price to Earnings (P/E)
+                        </th>
+                        <th>
+                            {{(stock.currentPrice / ((stock.revenue - stock?.expenditure) / (stock.sharesOutstanding))) | number : '1.2-2'}}
+                        </th>
+                  </tr>
+                    <tr>
+                        <th>
+                          Price/Sales (P/S)
+                        </th>
+                        <th>
+                            {{(stock?.currentPrice / (stock.revenue / stock.sharesOutstanding)) | number : '1.2-2'}}
+                        </th>
+                  </tr>
+                </thead>
+                </table>
+            </div>
+        </div>     
+    </div>
+</div>
+

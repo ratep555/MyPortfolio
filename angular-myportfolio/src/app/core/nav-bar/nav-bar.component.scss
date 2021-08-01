@@ -1,0 +1,17 @@
+a {
+    text-decoration: none;
+    color: orange;
+
+    &.active {
+        color: olivedrab;
+    }
+}
+
+.park:hover {
+    color: black;
+  }
+
+  .stark:hover {
+    color: black;
+  }
+

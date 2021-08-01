@@ -19,15 +19,14 @@ namespace Core.Entities
         public Modality Modality { get; set; }
 
 
-
         [ForeignKey("Segment")]
         public int SegmentId { get; set; }
         public Segment Segment { get; set; }
 
 
-        [ForeignKey("Type")]
-        public int TypeId { get; set; }
-        public Type Type { get; set; }
+        [ForeignKey("TypeOfStock")]
+        public int TypeOfStockId { get; set; }
+        public TypeOfStock Type { get; set; }
 
 
         public int? NumberOfEmployees { get; set; }

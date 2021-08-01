@@ -1,0 +1,158 @@
+[
+    {
+      "CompanyName": "Ingra d.d.",
+      "Symbol": "INGR",
+      "CurrentPrice": 11.2,
+      "CategoryId": 1,
+      "ModalityId": 2,
+      "SegmentId": 3,
+      "TypeOfStockId": 2
+
+    },
+    {
+      "CompanyName": "Hrvatski Telekom d.d.",
+      "Symbol": "HT",
+      "CurrentPrice": 11.2,
+      "CategoryId": 7,
+      "ModalityId": 2,
+      "SegmentId": 3,
+      "TypeOfStockId": 1
+    },
+    {
+        "CompanyName": "Rivijera Porec d.d.",
+        "Symbol": "RIVP",
+        "CurrentPrice": 29.60,
+        "CategoryId": 6,
+        "ModalityId": 2,
+        "SegmentId": 3,
+        "TypeOfStockId": 2
+      },
+      {
+        "CompanyName": "Tehnika d.d.",
+        "Symbol": "THNK",
+        "CurrentPrice": 220,
+        "CategoryId": 1,
+        "ModalityId": 1,
+        "SegmentId": 3,
+        "TypeOfStockId": 1
+      },
+      {
+          "CompanyName": "Sunce Koncern d.d.",
+          "Symbol": "SUKC",
+          "CurrentPrice": 150,
+          "CategoryId": 6,
+          "ModalityId": 1,
+          "SegmentId": 3,
+          "TypeOfStockId": 1
+        },
+        {
+          "CompanyName": "Zagrebacka banka d.d.",
+          "Symbol": "ZABA",
+          "CurrentPrice": 55,
+          "CategoryId": 3,
+          "ModalityId": 2,
+          "SegmentId": 3,
+          "TypeOfStockId": 2
+        },
+        {
+            "CompanyName": "Podravka d.d.",
+            "Symbol": "PODR",
+            "CurrentPrice": 29.60,
+            "CategoryId": 5,
+            "ModalityId": 1,
+            "SegmentId": 1,
+            "TypeOfStockId": 1         
+           },
+          {
+            "CompanyName": "Jadroplov d.d.",
+            "Symbol": "JDPL",
+            "CurrentPrice": 13.50,
+            "CategoryId": 2,
+            "ModalityId": 2,
+            "SegmentId": 2,
+            "TypeOfStockId": 2
+          },
+          {
+              "CompanyName": "Cakovecki Mlinovi d.d.",
+              "Symbol": "CKML",
+              "CurrentPrice": 7200,
+              "CategoryId": 4,
+              "ModalityId": 2,
+              "SegmentId": 3,
+              "TypeOfStockId": 2
+            },
+            {
+              "CompanyName": "Atlantska Plovidba d.d.",
+              "Symbol": "ATPL",
+              "CurrentPrice": 189,
+              "CategoryId": 2,
+              "ModalityId": 1,
+              "SegmentId": 1,
+              "TypeOfStockId": 1
+            },
+            {
+                "CompanyName": "Atlantic Grupa d.d.",
+                "Symbol": "ATGR",
+                "CurrentPrice": 1440,
+                "CategoryId": 5,
+                "ModalityId": 2,
+                "SegmentId": 1,
+                "TypeOfStockId": 1
+              },
+              {
+                "CompanyName": "Uljanik Plovidba d.d.",
+                "Symbol": "ULPL",
+                "CurrentPrice": 20,
+                "CategoryId": 2,
+                "ModalityId": 2,
+                "SegmentId": 2,
+                "TypeOfStockId": 1
+              },
+              {
+                  "CompanyName": "Institut Građevinarstva Hrvatske d.d.",
+                  "Symbol": "IGH",
+                  "CurrentPrice": 129,
+                  "CategoryId": 1,
+                  "ModalityId": 1,
+                  "SegmentId": 2,
+                  "TypeOfStockId": 2
+                },
+                {
+                  "CompanyName": "Plava Laguna d.d.",
+                  "Symbol": "PLAG",
+                  "CurrentPrice": 11.2,
+                  "CategoryId": 1,
+                  "ModalityId": 2,
+                  "SegmentId": 1,
+                  "TypeOfStockId": 1
+                },
+                {
+                    "CompanyName": "Adris grupa d.d.",
+                    "Symbol": "ADRS",
+                    "CurrentPrice": 410,
+                    "CategoryId": 6,
+                    "ModalityId": 2,
+                    "SegmentId": 3,
+                    "TypeOfStockId": 1
+
+                  },
+                  {
+                    "CompanyName": "Arenaturist d.d.",
+                    "Symbol": "ARNT",
+                    "CurrentPrice": 350,
+                    "CategoryId": 6,
+                    "ModalityId": 2,
+                    "SegmentId": 1,
+                    "TypeOfStockId": 1
+                  },
+                  {
+                      "CompanyName": "Turisthotel d.d.",
+                      "Symbol": "TUHO",
+                      "CurrentPrice": 3000,
+                      "CategoryId": 6,
+                      "ModalityId": 1,
+                      "SegmentId": 3,
+                      "TypeOfStockId": 1
+  
+                    }
+  ]

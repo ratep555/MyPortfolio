@@ -1,0 +1,50 @@
+[
+    {
+      "Residence": "Zagreb",
+      "Amount": 18
+    },
+    {
+      "Residence": "Rijeka",
+      "Amount": 15
+    },
+    {
+      "Residence": "Rovinj",
+      "Amount": 5
+    },
+    {
+      "Residence": "Andrijaševci",
+      "Amount": 8
+    },
+    {
+      "Residence": "Antunovac",
+      "Amount": 0
+    },
+    {
+      "Residence": "Babina Greda",
+      "Amount": 5
+    },
+    {
+      "Residence": "Crikvenica",
+      "Amount": 10
+    },
+    {
+      "Residence": "Čabar",
+      "Amount": 5
+    },
+    {
+      "Residence": "Čaglin",
+      "Amount": 5
+    },
+    {
+      "Residence": "Daruvar",
+      "Amount": 10
+    },
+    {
+      "Residence": "Davor",
+      "Amount": 10
+    },
+    {
+      "Residence": "Delnice",
+      "Amount": 5
+    }
+  ]
