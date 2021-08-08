@@ -4,6 +4,7 @@ import { SurtaxComponent } from './surtax.component';
 import { SurtaxAddComponent } from './surtax-add/surtax-add.component';
 import { SurtaxEditComponent } from './surtax-edit/surtax-edit.component';
 import { SharedModule } from '../shared/shared.module';
+import { SurtaxRoutingModule } from './surtax-routing.module';
 
 
 
@@ -15,7 +16,8 @@ import { SharedModule } from '../shared/shared.module';
   ],
   imports: [
     CommonModule,
-    SharedModule
+    SharedModule,
+    SurtaxRoutingModule
   ],
   exports: [SurtaxComponent]
 })

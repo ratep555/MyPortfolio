@@ -40,8 +40,7 @@ namespace Infrastructure.Services
             
             return await Task.FromResult(surtax);     
         }
-
-
+        
         public async Task<Surtax> GetSurtaxByIdAsync(int id)
         {
             return await _context.Surtaxes         

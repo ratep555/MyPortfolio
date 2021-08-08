@@ -1,1 +1,16 @@
-<p>modality-edit works!</p>
+<div class="container-fluid" style="margin-top: 200px;">    
+    <div class="d-flex justify-content-center mt-5 mb-5">
+        <div class="col-3">
+            <form [formGroup]="modalityForm" (ngSubmit)="onSubmit()">
+                <div class="text-center mb-4">
+              <h1 class="h3 mb-3 font-weight-normal">Edit Modality</h1>
+                </div>              
+                <input formControlName="id" id="id" class="form-control" hidden>          
+                <app-text-input formControlName="label" [label]="'Label'"></app-text-input>
+                <button [disabled]="modalityForm.invalid" class="btn btn-lg btn-primary btn-block" 
+                type="submit">Edit</button>
+              </form>
+        </div>
+    </div>    
+        </div>
+

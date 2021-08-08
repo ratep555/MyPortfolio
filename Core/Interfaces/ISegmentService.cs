@@ -7,7 +7,8 @@ namespace Core.Interfaces
 {
     public interface ISegmentService
     {
-        Task<IQueryable<Segment>> GetSegmentsAsync(QueryParameters queryParameters);
+        Task<IQueryable<Segment>> GetSegmentsWithSearching(QueryParameters queryParameters);
+        Task<IQueryable<Segment>> GetSegmentsWithPaging(QueryParameters queryParameters);
         Task<Segment> GetSegmentByIdAsync(int id);   
         Task CreateSegment(Segment segment);     
         Task UpdateSegment(Segment segment);

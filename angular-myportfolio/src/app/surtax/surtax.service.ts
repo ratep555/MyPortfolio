@@ -4,6 +4,7 @@ import { environment } from 'src/environments/environment';
 import { MyParams } from '../shared/models/myparams';
 import { IPaginationForSurtax } from '../shared/models/pagination';
 import { map } from 'rxjs/operators';
+import { INewSurtax, ISurtax } from '../shared/models/surtax';
 
 
 @Injectable({
@@ -11,6 +12,7 @@ import { map } from 'rxjs/operators';
 })
 export class SurtaxService {
   baseUrl = environment.apiUrl;
+  formData: INewSurtax = new INewSurtax();
 
   constructor(private http: HttpClient) { }
 
@@ -28,4 +30,34 @@ export class SurtaxService {
       })
     );
   }
+
+  createSurtax(values: any) {
+    return this.http.post(this.baseUrl + 'surtaxes', values);
+  }
+
+  updateSurtax(id: number, params: any) {
+    return this.http.put(`${this.baseUrl}surtaxes/${id}`, params);
+  }
+
+  getSurtaxById(id: number) {
+    return this.http.get<ISurtax>(`${this.baseUrl}surtaxes/${id}`);
+  }
+
+  deleteSurtax(id: number) {
+    return this.http.delete(`${this.baseUrl}surtaxes/${id}`);
 }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

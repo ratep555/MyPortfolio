@@ -1,9 +1,9 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-// import { ToastrService } from 'ngx-toastr';
 import { IStock } from '../shared/models/stock';
 import { MyParams } from '../shared/models/myparams';
 import { StockService } from './stock.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-stock',
@@ -17,7 +17,8 @@ export class StockComponent implements OnInit {
   totalCount: number;
 
   constructor(private stockService: StockService,
-              private router: Router) { }
+              private router: Router,
+              private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.getStocks();
@@ -53,6 +54,20 @@ export class StockComponent implements OnInit {
       this.myParams.page = event;
       this.getStocks();
     }
+}
+
+onDelete(id: number) {
+  if (confirm('Are you sure you want to delete this record?')) {
+    this.stockService.deleteStock(id)
+      .subscribe(
+        res => {
+          this.getStocks();
+          this.toastr.error('Deleted successfully!');
+        },
+        err => { console.log(err);
+         }
+      );
+  }
 }
 
   onRefresh() {

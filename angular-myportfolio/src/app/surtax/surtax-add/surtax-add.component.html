@@ -1,1 +1,16 @@
-<p>surtax-add works!</p>
+<div class="container-fluid" style="margin-top: 200px;">    
+    <div class="d-flex justify-content-center mt-5">
+        <div class="col-3">
+            <form [formGroup]="surtaxForm" (ngSubmit)="onSubmit()">
+                <div class="text-center mb-4">
+              <h1 class="h3 mb-3 font-weight-normal">Add Surtax</h1>
+                </div>                     
+                <app-text-input formControlName="residence" [label]="'Residence'"></app-text-input>
+                <app-text-input formControlName="amount" [label]="'Amount'"></app-text-input>             
+                <button [disabled]="surtaxForm.invalid" class="btn btn-lg btn-primary btn-block" 
+                type="submit">Add</button>
+              </form>
+        </div>
+    </div>    
+        </div>
+

@@ -18,45 +18,45 @@ namespace API.Controllers
         {
             _mapper = mapper;
             _modalityService = modalityService;
-
         }
 
         [HttpGet]
-        public async Task<ActionResult<Pagination<ModalityToReturnDto>>> GetAllModalities(
+        public async Task<ActionResult<Pagination<ModalityDto>>> GetAllModalities(
         [FromQuery] QueryParameters queryParameters)
         {
-            var list = await _modalityService.GetModalitiesAsync(queryParameters);
+            var modalities = await _modalityService.GetModalitiesWithSearching(queryParameters);
+            var list = await _modalityService.GetModalitiesWithPaging(queryParameters);
 
-            var data = _mapper.Map<IEnumerable<ModalityToReturnDto>>(list);
+            var data = _mapper.Map<IEnumerable<ModalityDto>>(list);
 
-            return Ok(new Pagination<ModalityToReturnDto>
-            (queryParameters.Page, queryParameters.PageCount, list.Count(), data));
+            return Ok(new Pagination<ModalityDto>
+            (queryParameters.Page, queryParameters.PageCount, modalities.Count(), data));
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ModalityToReturnDto>> GetModalityById(int id)
+        public async Task<ActionResult<ModalityDto>> GetModalityById(int id)
         {
             var modality = await _modalityService.GetModalityByIdAsync(id);
 
             if (modality == null) return NotFound();
 
-            return _mapper.Map<ModalityToReturnDto>(modality);
+            return _mapper.Map<ModalityDto>(modality);
         }
 
         [HttpPost]
-        public async Task<ActionResult<ModalityToCreateDto>> CreateModality([FromBody] ModalityToCreateDto modalityDTO)
+        public async Task<ActionResult<ModalityDto>> CreateModality([FromBody] ModalityDto modalityDTO)
         {
             var modality = _mapper.Map<Modality>(modalityDTO);
 
             await _modalityService.CreateModality(modality);
 
-            return _mapper.Map<ModalityToCreateDto>(modality);
+            return _mapper.Map<ModalityDto>(modality);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<ModalityToEditDto>> UpdateModality(int id, [FromBody] ModalityToEditDto modalityToEditDto)
+        public async Task<ActionResult<ModalityDto>> UpdateModality(int id, [FromBody] ModalityDto modalityDto)
         {
-            var modality = _mapper.Map<Modality>(modalityToEditDto);
+            var modality = _mapper.Map<Modality>(modalityDto);
 
             if (id != modality.Id) return BadRequest();
 

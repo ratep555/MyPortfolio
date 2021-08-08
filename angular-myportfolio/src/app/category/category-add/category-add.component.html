@@ -1,1 +1,15 @@
-<p>category-add works!</p>
+<div class="container-fluid" style="margin-top: 200px;">    
+    <div class="d-flex justify-content-center mt-5 mb-5">
+        <div class="col-3">
+            <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+                <div class="text-center mb-4">
+              <h1 class="h3 mb-3 font-weight-normal">Add Category</h1>
+                </div>                     
+                <app-text-input formControlName="categoryName" [label]="'Category Name'"></app-text-input>
+                <button [disabled]="categoryForm.invalid" class="btn btn-lg btn-primary btn-block" 
+                type="submit">Add</button>
+              </form>
+        </div>
+    </div>    
+        </div>
+

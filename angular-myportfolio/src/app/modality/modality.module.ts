@@ -4,6 +4,7 @@ import { ModalityComponent } from './modality.component';
 import { ModalityAddComponent } from './modality-add/modality-add.component';
 import { ModalityEditComponent } from './modality-edit/modality-edit.component';
 import { SharedModule } from '../shared/shared.module';
+import { ModalityRoutingModule } from './modality-routing.module';
 
 
 
@@ -15,7 +16,8 @@ import { SharedModule } from '../shared/shared.module';
   ],
   imports: [
     CommonModule,
-    SharedModule
+    SharedModule,
+    ModalityRoutingModule
   ]
 })
 export class ModalityModule { }

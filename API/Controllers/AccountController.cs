@@ -1,9 +1,11 @@
+using System.Linq;
 using System.Threading.Tasks;
-using API.Excepions;
+using API.ErrorHandling;
 using API.Extensions;
 using Core.Dtos;
 using Core.Entities;
 using Core.Interfaces;
+using Core.Paging;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -15,17 +17,20 @@ namespace API.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly IUserService _userService;
+        private readonly IAnnualReviewService _annualReviewService1;
         private readonly ITokenService _tokenService;
 
         public AccountController(
         UserManager<AppUser> userManager,
         SignInManager<AppUser> signInManager,
         IUserService userService,
+        IAnnualReviewService annualReviewService,
         ITokenService tokenService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _userService = userService;
+            _annualReviewService1 = annualReviewService;
             _tokenService = tokenService;
         }
 
@@ -55,15 +60,16 @@ namespace API.Controllers
         {
             var user = await _userManager.FindByEmailAsync(loginDto.Email);
 
-            if (user == null) return Unauthorized();
+            if (user == null) return Unauthorized(new ServerResponse(401));
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
-            if (!result.Succeeded) return Unauthorized();
+            if (!result.Succeeded) return Unauthorized(new ServerResponse(401));
 
-            if (user.LockoutEnd != null) return Unauthorized();
+            if (user.LockoutEnd != null) return Unauthorized(new ServerResponse(401));
         
-          //  await _transactionService.CreatingLoginNewAnnualProfitOrLoss(loginDto.Email);
+            await _annualReviewService1.ActionsRegardingProfitOrLossCardUponLogin(loginDto.Email);
+
             return new UserDto
             {
                 Email = user.Email,
@@ -91,7 +97,7 @@ namespace API.Controllers
 
             var result = await _userManager.CreateAsync(user, registerDto.Password);
 
-            if (!result.Succeeded) return BadRequest(new ValidationErrorResponse());
+            if (!result.Succeeded) return BadRequest(new ServerResponse(400));
 
             return new UserDto
             {
@@ -101,5 +107,58 @@ namespace API.Controllers
             };
         }
 
+        [Authorize]
+        [HttpGet("users")]
+        public async Task<ActionResult<Pagination<UserToReturnDto>>> GetAllUsers(
+        [FromQuery] QueryParameters queryParameters)
+        {
+            var email = User.RetrieveEmailFromPrincipal();
+
+            var users = await _userService.GetUsersWithSearching(queryParameters, email);
+            var list = await _userService.GetUsersWithPaging(queryParameters, email);
+
+            return Ok(new Pagination<UserToReturnDto>
+            (queryParameters.Page, queryParameters.PageCount, users.Count(), list));
+        }
+
+         [HttpPut("unlock/{id}")]
+        public async Task<ActionResult> UnlockUser(string id)
+        {
+            var user = await _userService.FindUserByIdAsync(id);
+
+            if (user == null)
+            {
+                  return NotFound(new ServerResponse(404));
+            }
+
+           await _userService.UnlockUser(id);
+
+           return Ok();
+        }
+        [HttpPut("lock/{id}")]
+        public async Task<ActionResult> LockUser1(string id)
+        {
+            var user = await _userService.FindUserByIdAsync(id);
+
+            if (user == null)
+            {
+                  return NotFound(new ServerResponse(404));
+            }
+
+           await _userService.LockUser(id);
+
+           return Ok();
+        }
+
+
     }
 }
+
+
+
+
+
+
+
+
+

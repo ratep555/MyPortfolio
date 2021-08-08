@@ -3,6 +3,7 @@ export interface IStock {
     symbol: string;
     currentPrice: number;
     companyName: string;
+    totalQuantity: number;
     category: string;
     modality: string;
     segment: string;
@@ -26,4 +27,15 @@ export class INewStock {
     segment: string;
     typeOfStock: string;
     totalQuantity: number;
+  }
+
+export class INewStockToCreateOrEdit {
+    id: number;
+    symbol: string;
+    currentPrice: number;
+    companyName: string;
+    categoryId: number;
+    modalityId: number;
+    segmentId: number;
+    typeOfStockId: number;
   }

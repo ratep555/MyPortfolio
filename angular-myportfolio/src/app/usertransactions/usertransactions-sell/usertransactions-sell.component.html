@@ -1,0 +1,26 @@
+<div class="container-fluid" style="margin-top: 200px;">    
+    <div class="d-flex justify-content-center mt-5 mb-5">
+        <div class="col-5">
+            <div class="text-center mb-4">
+                <h1 class="h3 mb-3 font-weight-normal">Sell Stock</h1>
+                  </div>    
+            <div class="form-group">
+                <input class="form-control form-control-lg" placeholder="{{stock?.symbol}}" readonly="readonly">
+            </div>
+            <div class="form-group">
+                <input class="form-control form-control-lg" placeholder="Current Quantity: {{stock?.totalQuantity}}" 
+                readonly="readonly">
+            </div>
+            <form [formGroup]="stockForm" (ngSubmit)="onSubmit()">
+                <app-text-input formControlName="price" [label]="'Price'"></app-text-input>
+                <app-text-input formControlName="quantity" [label]="'Quantity'"></app-text-input>    
+                <ul class="text-danger list-unstyled" *ngIf="errors.length > 0">
+                    <li *ngFor="let error of errors">{{error}}</li>
+                </ul>      
+                <button [disabled]="stockForm.invalid" class="zeky btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+              </form>
+            </div>
+          </div>
+    
+    
+</div>

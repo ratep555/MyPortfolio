@@ -1,9 +1,49 @@
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { map } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
+import { MyParams } from '../shared/models/myparams';
+import { IPaginationForSegment } from '../shared/models/pagination';
+import { INewSegment, ISegment } from '../shared/models/segment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SegmentService {
+  baseUrl = environment.apiUrl;
+  formData: INewSegment = new INewSegment();
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
+
+  getSegments(myparams: MyParams) {
+    let params = new HttpParams();
+    if (myparams.query) {
+      params = params.append('query', myparams.query);
+    }
+    params = params.append('page', myparams.page.toString());
+    params = params.append('pageCount', myparams.pageCount.toString());
+    return this.http.get<IPaginationForSegment>(this.baseUrl + 'segments', {observe: 'response', params})
+    .pipe(
+      map(response  => {
+        return response.body;
+      })
+    );
+  }
+
+  createSegment(values: any) {
+    return this.http.post(this.baseUrl + 'segments', values);
+  }
+
+  updateSegment(id: number, params: any) {
+    return this.http.put(`${this.baseUrl}segments/${id}`, params);
+  }
+
+  getSegmentById(id: number) {
+    return this.http.get<ISegment>(`${this.baseUrl}segments/${id}`);
+  }
+
+  deleteSegment(id: number) {
+    return this.http.delete(`${this.baseUrl}segments/${id}`);
+}
+
 }

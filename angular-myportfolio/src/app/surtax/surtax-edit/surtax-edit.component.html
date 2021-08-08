@@ -1,1 +1,17 @@
-<p>surtax-edit works!</p>
+<div class="container-fluid" style="margin-top: 200px;">    
+    <div class="d-flex justify-content-center mt-5">
+        <div class="col-3">
+            <form [formGroup]="surtaxForm" (ngSubmit)="onSubmit()">
+                <div class="text-center mb-4">
+              <h1 class="h3 mb-3 font-weight-normal">Edit Surtax</h1>
+                </div>      
+                <input formControlName="id" id="id" class="form-control" hidden>          
+                <app-text-input formControlName="residence" [label]="'Residence'"></app-text-input>
+                <app-text-input formControlName="amount" [label]="'Amount'"></app-text-input>             
+                <button [disabled]="surtaxForm.invalid" class="btn btn-lg btn-primary btn-block" 
+                type="submit">Edit</button>
+              </form>
+        </div>
+    </div>    
+        </div>
+

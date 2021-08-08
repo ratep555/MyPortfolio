@@ -4,6 +4,7 @@ import { TypeOfStockComponent } from './type-of-stock.component';
 import { TypeOfStockAddComponent } from './type-of-stock-add/type-of-stock-add.component';
 import { TypeOfStockEditComponent } from './type-of-stock-edit/type-of-stock-edit.component';
 import { SharedModule } from '../shared/shared.module';
+import { TypeOfStockRoutingModule } from './type-of-stock-routing.module';
 
 
 
@@ -15,7 +16,8 @@ import { SharedModule } from '../shared/shared.module';
   ],
   imports: [
     CommonModule,
-    SharedModule
+    SharedModule,
+    TypeOfStockRoutingModule
   ]
 })
 export class TypeOfStockModule { }

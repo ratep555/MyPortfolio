@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { INewSegment } from 'src/app/shared/models/segment';
+import { SegmentService } from '../segment.service';
 
 @Component({
   selector: 'app-segment-add',
@@ -6,10 +10,35 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./segment-add.component.scss']
 })
 export class SegmentAddComponent implements OnInit {
+  segmentForm: FormGroup;
 
-  constructor() { }
+  constructor(private segmentService: SegmentService,
+              private router: Router,
+              private fb: FormBuilder) { }
 
   ngOnInit(): void {
+    this.createSegmentForm();
+  }
+
+  createSegmentForm() {
+    this.segmentForm = this.fb.group({
+      label: ['', [Validators.required]]
+    });
+  }
+
+  onSubmit() {
+    this.segmentService.createSegment(this.segmentForm.value).subscribe(() => {
+      this.resetForm(this.segmentForm);
+      this.router.navigateByUrl('segments');
+    },
+    error => {
+      console.log(error);
+    });
+  }
+
+  resetForm(form: FormGroup) {
+    form.reset();
+    this.segmentService.formData = new INewSegment();
   }
 
 }

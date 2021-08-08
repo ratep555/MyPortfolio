@@ -4,6 +4,8 @@ import { CategoryComponent } from './category.component';
 import { CategoryAddComponent } from './category-add/category-add.component';
 import { CategoryEditComponent } from './category-edit/category-edit.component';
 import { SharedModule } from '../shared/shared.module';
+import { SurtaxRoutingModule } from '../surtax/surtax-routing.module';
+import { CategoryRoutingModule } from './category-routing.module';
 
 
 
@@ -15,7 +17,8 @@ import { SharedModule } from '../shared/shared.module';
   ],
   imports: [
     CommonModule,
-    SharedModule
-  ]
-})
+    SharedModule,
+    CategoryRoutingModule
+  ]})
+
 export class CategoryModule { }

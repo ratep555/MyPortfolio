@@ -7,7 +7,6 @@ using Core.Entities;
 using Core.Interfaces;
 using Core.Paging;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
@@ -22,42 +21,42 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<Pagination<SurtaxToReturnDto>>> GetAllSurtaxes(
+        public async Task<ActionResult<Pagination<SurtaxDto>>> GetAllSurtaxes(
         [FromQuery] QueryParameters queryParameters)
         {
             var surtaxes = await _surtaxService.GetSurtaxesWithSearching(queryParameters);
             var list = await _surtaxService.GetSurtaxesWithPaging(queryParameters);
 
-            var data = _mapper.Map<IEnumerable<SurtaxToReturnDto>>(list);
+            var data = _mapper.Map<IEnumerable<SurtaxDto>>(list);
 
-            return Ok(new Pagination<SurtaxToReturnDto>
+            return Ok(new Pagination<SurtaxDto>
             (queryParameters.Page, queryParameters.PageCount, surtaxes.Count(), data));
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<SurtaxToReturnDto>> GetSurtaxById(int id)
+        [HttpGet("{id}")]       
+        public async Task<ActionResult<SurtaxDto>> GetSurtaxById(int id)
         {
             var surtax = await _surtaxService.GetSurtaxByIdAsync(id);
 
             if (surtax == null) return NotFound();
 
-            return _mapper.Map<SurtaxToReturnDto>(surtax);
+            return _mapper.Map<SurtaxDto>(surtax);
         }
 
         [HttpPost]
-        public async Task<ActionResult<SurtaxToCreateDto>> CreateSegment([FromBody] SurtaxToCreateDto surtaxDTO)
+        public async Task<ActionResult<SurtaxDto>> CreateSegment([FromBody] SurtaxDto surtaxDTO)
         {
             var surtax = _mapper.Map<Surtax>(surtaxDTO);
 
             await _surtaxService.CreateSurtax(surtax);
 
-            return _mapper.Map<SurtaxToCreateDto>(surtax);
+            return _mapper.Map<SurtaxDto>(surtax);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<SurtaxToEditDto>> UpdateSurtax(int id, [FromBody] SurtaxToEditDto surtaxToEditDto)
+        public async Task<ActionResult<SurtaxDto>> UpdateSurtax(int id, [FromBody] SurtaxDto surtaxDto)
         {
-            var surtax = _mapper.Map<Surtax>(surtaxToEditDto);
+            var surtax = _mapper.Map<Surtax>(surtaxDto);
 
             if (id != surtax.Id) return BadRequest();
 

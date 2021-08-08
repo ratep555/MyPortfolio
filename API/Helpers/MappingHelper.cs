@@ -14,28 +14,19 @@ namespace API.Helpers
                 .ForMember(d => d.Segment, o => o.MapFrom(s => s.Segment.Label))
                 .ForMember(d => d.TypeOfStock, o => o.MapFrom(s => s.Type.Label));
             
-            CreateMap<StockToCreateDto, Stock>().ReverseMap();
-            CreateMap<StockToEditDto, Stock>().ReverseMap();
+            CreateMap<StockDto, Stock>().ReverseMap();
 
-            CreateMap<Category, CategoryToReturnDto>().ReverseMap();
-            CreateMap<CategoryToCreateDto, Category>().ReverseMap();
-            CreateMap<CategoryToEditDto, Category>().ReverseMap();
+            CreateMap<Category, CategoryDto>().ReverseMap();
 
-            CreateMap<Modality, ModalityToReturnDto>().ReverseMap();
-            CreateMap<ModalityToCreateDto, Modality>().ReverseMap();
-            CreateMap<ModalityToEditDto, Modality>().ReverseMap();
+            CreateMap<Modality, ModalityDto>().ReverseMap();
 
-            CreateMap<Segment, SegmentToReturnDto>().ReverseMap();
-            CreateMap<SegmentToCreateDto, Segment>().ReverseMap();
-            CreateMap<SegmentToEditDto, Segment>().ReverseMap();            
-
-            CreateMap<TypeOfStock, TypeOfStockToReturnDto>().ReverseMap();
-            CreateMap<TypeOfStockToCreateDto, TypeOfStock>().ReverseMap();
-            CreateMap<TypeOfStockToEditDto, TypeOfStock>().ReverseMap();
+            CreateMap<Segment, SegmentDto>().ReverseMap();
             
-            CreateMap<Surtax, SurtaxToReturnDto>().ReverseMap();
-            CreateMap<SurtaxToCreateDto, Surtax>().ReverseMap();
-            CreateMap<SurtaxToEditDto, Surtax>().ReverseMap();
+            CreateMap<TypeOfStock, TypeOfStockDto>().ReverseMap();
+            
+            CreateMap<Surtax, SurtaxDto>().ReverseMap();
+
+            CreateMap<StockTransaction, TransactionDto>().ReverseMap();
         }
     }
 }

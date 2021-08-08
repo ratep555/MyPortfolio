@@ -17,10 +17,10 @@ namespace Infrastructure.Services
             _context = context;
         }
 
-        public async Task<IQueryable<Category>> GetCategoriesAsync(QueryParameters queryParameters)
+        public async Task<IQueryable<Category>> GetCategoriesWithSearching(QueryParameters queryParameters)
         {
             IQueryable<Category> category = _context.Categories.AsQueryable()
-                                        .OrderBy(x => x.CategoryName);
+                                            .OrderBy(x => x.CategoryName);
             
             if (queryParameters.HasQuery())
             {
@@ -28,8 +28,18 @@ namespace Infrastructure.Services
                 .Where(t => t.CategoryName.Contains(queryParameters.Query));
             }
 
-            return await Task.FromResult(category.Skip(queryParameters.PageCount * (queryParameters.Page - 1))
-                                                 .Take(queryParameters.PageCount));        }
+            return await Task.FromResult(category);        
+        }
+
+        public async Task<IQueryable<Category>> GetCategoriesWithPaging(QueryParameters queryParameters)
+        {
+            var category = await GetCategoriesWithSearching(queryParameters);
+
+            category = category.Skip(queryParameters.PageCount * (queryParameters.Page - 1))
+                           .Take(queryParameters.PageCount);
+            
+            return await Task.FromResult(category);     
+        }
 
         public async Task<Category> GetCategoryByIdAsync(int id)
         {
@@ -39,20 +49,20 @@ namespace Infrastructure.Services
 
         public async Task CreateCategory(Category category)
         {
-             _context.Categories.Add(category);
-             await _context.SaveChangesAsync();                    
+            _context.Categories.Add(category);
+            await _context.SaveChangesAsync();                    
         }
 
         public async Task UpdateCategory(Category category)
         {
-             _context.Entry(category).State = EntityState.Modified;        
-             await _context.SaveChangesAsync();
+            _context.Entry(category).State = EntityState.Modified;        
+            await _context.SaveChangesAsync();
         }
 
         public async Task DeleteCategory(Category category)
         {
-                _context.Categories.Remove(category);
-                await _context.SaveChangesAsync();
+            _context.Categories.Remove(category);
+            await _context.SaveChangesAsync();
         }
 
     }

@@ -8,7 +8,8 @@ namespace Core.Interfaces
     public interface
      ICategoryService
     {
-        Task<IQueryable<Category>> GetCategoriesAsync(QueryParameters queryParameters);
+        Task<IQueryable<Category>> GetCategoriesWithSearching(QueryParameters queryParameters);
+        Task<IQueryable<Category>> GetCategoriesWithPaging(QueryParameters queryParameters);
         Task<Category> GetCategoryByIdAsync(int id);
         Task CreateCategory(Category category);
         Task UpdateCategory(Category category);

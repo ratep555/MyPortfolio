@@ -1,0 +1,19 @@
+thead {
+    background-color: lightblue;
+}
+tbody:nth-child(even) {
+    background-color: lightgrey;
+}
+tbody:nth-child(odd) {
+    background-color: lightgoldenrodyellow;
+}
+.wiki {
+    color: orange;
+}
+
+.center {
+    margin-left: auto;
+    margin-right: auto;
+    width: 57%;
+    color: black;
+}

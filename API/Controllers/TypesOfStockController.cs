@@ -21,41 +21,42 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<Pagination<TypeOfStockToReturnDto>>> GetAllTypesOfStock(
+        public async Task<ActionResult<Pagination<TypeOfStockDto>>> GetAllTypesOfStock(
         [FromQuery] QueryParameters queryParameters)
         {
-            var list = await _typeOfStockService.GetTypesOfStockAsync(queryParameters);
+            var typesOfStock = await _typeOfStockService.GetTypesOfStockWithSearching(queryParameters);
+            var list = await _typeOfStockService.GetTypesOfStockWithPaging(queryParameters);
 
-            var data = _mapper.Map<IEnumerable<TypeOfStockToReturnDto>>(list);
+            var data = _mapper.Map<IEnumerable<TypeOfStockDto>>(list);
 
-            return Ok(new Pagination<TypeOfStockToReturnDto>
-            (queryParameters.Page, queryParameters.PageCount, list.Count(), data)); 
+            return Ok(new Pagination<TypeOfStockDto>
+            (queryParameters.Page, queryParameters.PageCount, typesOfStock.Count(), data)); 
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<TypeOfStockToReturnDto>> GetTypeOfStockById(int id)
+        public async Task<ActionResult<TypeOfStockDto>> GetTypeOfStockById(int id)
         {
             var typeOfStock = await _typeOfStockService.GetTypeOfStockByIdAsync(id);
 
             if (typeOfStock == null) return NotFound();
 
-            return _mapper.Map<TypeOfStockToReturnDto>(typeOfStock);
+            return _mapper.Map<TypeOfStockDto>(typeOfStock);
         }
 
         [HttpPost]
-        public async Task<ActionResult<TypeOfStockToCreateDto>> CreateTypeOfStock([FromBody] TypeOfStockToCreateDto typeOfStockDTO)
+        public async Task<ActionResult<TypeOfStockDto>> CreateTypeOfStock([FromBody] TypeOfStockDto typeOfStockDTO)
         {
             var typeOfStock = _mapper.Map<TypeOfStock>(typeOfStockDTO);
 
             await _typeOfStockService.CreateTypeOfStock(typeOfStock);
 
-            return _mapper.Map<TypeOfStockToCreateDto>(typeOfStock);
+            return _mapper.Map<TypeOfStockDto>(typeOfStock);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<TypeOfStockToEditDto>> UpdateTypeOfStock(int id, [FromBody] TypeOfStockToEditDto typeOfStockToEditDto)
+        public async Task<ActionResult<TypeOfStockDto>> UpdateTypeOfStock(int id, [FromBody] TypeOfStockDto typeOfStockDto)
         {
-            var typeOfStock = _mapper.Map<TypeOfStock>(typeOfStockToEditDto);
+            var typeOfStock = _mapper.Map<TypeOfStock>(typeOfStockDto);
 
             if (id != typeOfStock.Id) return BadRequest();
 

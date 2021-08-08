@@ -17,7 +17,7 @@ namespace Infrastructure.Services
             _context = context;
         }
 
-        public async Task<IQueryable<TypeOfStock>> GetTypesOfStockAsync(QueryParameters queryParameters)
+        public async Task<IQueryable<TypeOfStock>> GetTypesOfStockWithSearching(QueryParameters queryParameters)
         {
             IQueryable<TypeOfStock> typeOfStock = _context.TypesOfStock.AsQueryable()
                                         .OrderBy(x => x.Label);
@@ -28,8 +28,18 @@ namespace Infrastructure.Services
                 .Where(t => t.Label.Contains(queryParameters.Query));
             }
 
-            return await Task.FromResult(typeOfStock.Skip(queryParameters.PageCount * (queryParameters.Page - 1))
-                                                    .Take(queryParameters.PageCount));        }
+            return await Task.FromResult(typeOfStock);       
+        }
+        
+        public async Task<IQueryable<TypeOfStock>> GetTypesOfStockWithPaging(QueryParameters queryParameters)
+        {
+            var typeOfStock = await GetTypesOfStockWithSearching(queryParameters);
+
+            typeOfStock = typeOfStock.Skip(queryParameters.PageCount * (queryParameters.Page - 1))
+                           .Take(queryParameters.PageCount);
+            
+            return await Task.FromResult(typeOfStock);     
+        }
 
         public async Task<TypeOfStock> GetTypeOfStockByIdAsync(int id)
         {

@@ -21,41 +21,42 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<Pagination<CategoryToReturnDto>>> GetAllCategories(
+        public async Task<ActionResult<Pagination<CategoryDto>>> GetAllCategories(
         [FromQuery] QueryParameters queryParameters)
         {
-            var list = await _categoryService.GetCategoriesAsync(queryParameters);
+            var categories = await _categoryService.GetCategoriesWithSearching(queryParameters);
+            var list = await _categoryService.GetCategoriesWithPaging(queryParameters);
 
-            var data = _mapper.Map<IEnumerable<CategoryToReturnDto>>(list);
+            var data = _mapper.Map<IEnumerable<CategoryDto>>(list);
 
-            return Ok(new Pagination<CategoryToReturnDto>
-            (queryParameters.Page, queryParameters.PageCount, list.Count(), data));
+            return Ok(new Pagination<CategoryDto>
+            (queryParameters.Page, queryParameters.PageCount, categories.Count(), data));
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<CategoryToReturnDto>> GetCategoryById(int id)
+        public async Task<ActionResult<CategoryDto>> GetCategoryById(int id)
         {
             var category = await _categoryService.GetCategoryByIdAsync(id);
 
             if (category == null) return NotFound();
 
-            return _mapper.Map<CategoryToReturnDto>(category);
+            return _mapper.Map<CategoryDto>(category);
         }
 
         [HttpPost]
-        public async Task<ActionResult<CategoryToCreateDto>> CreateCategory([FromBody] CategoryToCreateDto categoryDTO)
+        public async Task<ActionResult<CategoryDto>> CreateCategory([FromBody] CategoryDto categoryDTO)
         {
             var category = _mapper.Map<Category>(categoryDTO);
 
             await _categoryService.CreateCategory(category);
 
-            return _mapper.Map<CategoryToCreateDto>(category);
+            return _mapper.Map<CategoryDto>(category);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<CategoryToEditDto>> UpdateCategory(int id, [FromBody] CategoryToEditDto categoryToEditDto)
+        public async Task<ActionResult<CategoryDto>> UpdateCategory(int id, [FromBody] CategoryDto categoryDto)
         {
-            var category = _mapper.Map<Category>(categoryToEditDto);
+            var category = _mapper.Map<Category>(categoryDto);
 
             if (id != category.Id) return BadRequest();
 

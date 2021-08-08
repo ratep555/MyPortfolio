@@ -18,9 +18,8 @@ namespace Infrastructure.Data
         public DbSet<TypeOfStock> TypesOfStock { get; set; }
         public DbSet<Surtax> Surtaxes { get; set; }
         public DbSet<AppUser> AppUsers { get; set; }
-
-
-
+        public DbSet<StockTransaction> StockTransactions {get; set;}
+        public DbSet<AnnualProfitOrLoss> AnnualProfitsOrLosses {get; set;}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) 
         {

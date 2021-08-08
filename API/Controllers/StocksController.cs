@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using API.ErrorHandling;
+using API.Extensions;
 using AutoMapper;
 using Core.Dtos;
 using Core.Entities;
@@ -16,15 +18,18 @@ namespace API.Controllers
     public class StocksController : BaseApiController
     {
         private readonly IStockService _stockService;
+        private readonly ITransactionService _transactionService;
         private readonly IMapper _mapper;
         private readonly IHttpClientFactory _clientFactory;
 
         public StocksController(
         IStockService stockService, 
+        ITransactionService transactionService,
         IMapper mapper,
         IHttpClientFactory clientFactory)
         {
             _stockService = stockService;
+            _transactionService = transactionService;
             _mapper = mapper;
             _clientFactory = clientFactory;
         }
@@ -42,31 +47,45 @@ namespace API.Controllers
             (queryParameters.Page, queryParameters.PageCount, stocks.Count(), data));
         }
 
-
         [HttpGet("{id}")]
         public async Task<ActionResult<StockToReturnDto>> GetStockById(int id)
+        {
+            var email = User.RetrieveEmailFromPrincipal();
+
+            var stock = await _stockService.GetStockByIdAsync(id);
+
+            if (stock == null) return NotFound(new ServerResponse(404));
+
+            var stockToReturn = _mapper.Map<StockToReturnDto>(stock);
+            stockToReturn.TotalQuantity = await _transactionService.TotalQuantity(email, id);
+
+            return Ok(stockToReturn);
+        }
+
+        [HttpGet("first/{id}")]
+        public async Task<ActionResult<StockDto>> GetStockByIdForEditing(int id)
         {
             var stock = await _stockService.GetStockByIdAsync(id);
 
             if (stock == null) return NotFound();
 
-            return _mapper.Map<StockToReturnDto>(stock);
+            return _mapper.Map<StockDto>(stock);
         }
 
         [HttpPost]
-        public async Task<ActionResult<StockToCreateDto>> CreateStock([FromBody] StockToCreateDto stockDTO)
+        public async Task<ActionResult<StockDto>> CreateStock([FromBody] StockDto stockDTO)
         {
             var stock = _mapper.Map<Stock>(stockDTO);
 
             await _stockService.CreateStock(stock);
 
-            return _mapper.Map<StockToCreateDto>(stock);
+            return _mapper.Map<StockDto>(stock);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<StockToEditDto>> UpdateStock(int id, [FromBody] StockToEditDto stockToEditDto)
+        public async Task<ActionResult<StockDto>> UpdateStock(int id, [FromBody] StockDto stockDto)
         {
-            var stock = _mapper.Map<Stock>(stockToEditDto);
+            var stock = _mapper.Map<Stock>(stockDto);
 
             if (id != stock.Id) return BadRequest();
 

@@ -1,6 +1,6 @@
 <div class="container" style="margin-top: 200px;">   
     <div class="form-inline pull-left">
-        <button routerLink="/stocksAdmin/addadminstock1/"  class="btn btn-info my-2 mr-2">
+        <button routerLink="/stocks/addstock/"  class="btn btn-info my-2 mr-2">
             <i class="fa fa-plus mr-1"></i>
             Add Stock</button>
     </div>
@@ -42,13 +42,15 @@
           <td>{{item.segment}}</td>
           <td>  
             <div class="text-center">
-                <button type="button" class="m-0 btn btn-info mr-5">
+                <button routerLink="/stocks/editstock/{{item.id}}"
+                type="button" class="m-0 btn btn-success mr-5">
                 <i class="fa fa-edit mr-1"></i>
                 Edit Stock</button>
                 <button routerLink="/stocks/{{item.id}}" 
-             class="mr-5 btn btn-success">
+             class="mr-5 btn btn-info">
              <i class="fa fa-info-circle mr-1"></i>Details</button>            
-             <button type="button" class="mr-5 btn btn-danger">
+             <button (click)="onDelete(item.id)"
+             type="button" class="mr-5 btn btn-danger">
              <i class="fa fa-trash mr-1"></i>Delete Stock</button>
               </div>
         </td>

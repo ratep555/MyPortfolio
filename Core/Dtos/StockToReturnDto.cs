@@ -6,6 +6,7 @@ namespace Core.Dtos
         public string Symbol { get; set;}
         public decimal CurrentPrice { get; set; }
         public string CompanyName { get; set; }
+        public int? TotalQuantity { get; set; }
         public string Category { get; set; }
         public string Modality { get; set; }
         public string Segment { get; set; }

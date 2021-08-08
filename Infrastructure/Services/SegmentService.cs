@@ -18,7 +18,7 @@ namespace Infrastructure.Services
 
         }
 
-        public async Task<IQueryable<Segment>> GetSegmentsAsync(QueryParameters queryParameters)
+        public async Task<IQueryable<Segment>> GetSegmentsWithSearching(QueryParameters queryParameters)
         {
             IQueryable<Segment> segment = _context.Segments.AsQueryable()
                                         .OrderBy(x => x.Label);
@@ -29,8 +29,18 @@ namespace Infrastructure.Services
                 .Where(t => t.Label.Contains(queryParameters.Query));
             }
 
-            return await Task.FromResult(segment.Skip(queryParameters.PageCount * (queryParameters.Page - 1))
-                                              .Take(queryParameters.PageCount));        }
+            return await Task.FromResult(segment);     
+        }
+        
+        public async Task<IQueryable<Segment>> GetSegmentsWithPaging(QueryParameters queryParameters)
+        {
+            var segment = await GetSegmentsWithSearching(queryParameters);
+
+            segment = segment.Skip(queryParameters.PageCount * (queryParameters.Page - 1))
+                           .Take(queryParameters.PageCount);
+            
+            return await Task.FromResult(segment);     
+        }
 
         public async Task<Segment> GetSegmentByIdAsync(int id)
         {

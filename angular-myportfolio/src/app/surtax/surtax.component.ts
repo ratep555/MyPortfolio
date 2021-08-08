@@ -1,15 +1,16 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-// import { ToastrService } from 'ngx-toastr';
 import { ISurtax } from '../shared/models/surtax';
 import { MyParams } from '../shared/models/myparams';
 import { SurtaxService } from './surtax.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-surtax',
   templateUrl: './surtax.component.html',
   styleUrls: ['./surtax.component.scss']
 })
+
 export class SurtaxComponent implements OnInit {
   @ViewChild('search', {static: false}) searchTerm: ElementRef;
   surtaxes: ISurtax[];
@@ -18,7 +19,8 @@ export class SurtaxComponent implements OnInit {
 
 
   constructor(private surtaxService: SurtaxService,
-              private router: Router) { }
+              private router: Router,
+              private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.getSurtaxes();
@@ -53,6 +55,20 @@ export class SurtaxComponent implements OnInit {
       this.myParams.page = event;
       this.getSurtaxes();
     }
+}
+
+onDelete(id: number) {
+  if (confirm('Are you sure you want to delete this record?')) {
+    this.surtaxService.deleteSurtax(id)
+      .subscribe(
+        res => {
+          this.getSurtaxes();
+          this.toastr.error('Deleted successfully!');
+        },
+        err => { console.log(err);
+         }
+      );
+  }
 }
 
 }
