@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { MyParams } from '../shared/models/myparams';
 import { ITypeOfStock } from '../shared/models/typeOfStock';
 import { TypeOfStockService } from './type-of-stock.service';
+import Swal from 'sweetalert2/dist/sweetalert2.js';
 
 @Component({
   selector: 'app-type-of-stock',
@@ -56,17 +57,25 @@ export class TypeOfStockComponent implements OnInit {
 }
 
 onDelete(id: number) {
-  if (confirm('Are you sure you want to delete this record?')) {
-    this.typeofstockService.deleteTypeOfStock(id)
-      .subscribe(
-        res => {
-          this.getTypesOfStock();
-          this.toastr.error('Deleted successfully!');
-        },
-        err => { console.log(err);
-         }
-      );
+  Swal.fire({
+    title: 'Are you sure want to delete this record?',
+    text: 'You will not be able to recover it afterwards!',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, delete it!',
+    confirmButtonColor: '#DD6B55',
+    cancelButtonText: 'No, keep it'
+  }).then((result) => {
+    if (result.value) {
+        this.typeofstockService.deleteTypeOfStock(id)
+    .subscribe(
+      res => {
+        this.getTypesOfStock();
+        this.toastr.error('Deleted successfully!');
+      }, err => { console.log(err);
+       });
   }
+});
 }
 
 }

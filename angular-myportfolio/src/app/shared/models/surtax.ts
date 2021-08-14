@@ -9,3 +9,12 @@ export class INewSurtax {
     residence: string;
     amount: number;
   }
+
+export class INewSurtax1 {
+    constructor(
+    public id: number,
+    public residence: string,
+    public amount: number
+    ) {}
+
+}

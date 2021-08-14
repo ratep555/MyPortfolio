@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Core.Dtos;
 using Core.Entities;
 using Core.Interfaces;
+using Core.Paging;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,11 +19,36 @@ namespace Infrastructure.Services
             _context = context;
         }
 
+        public async Task<IQueryable<AnnualProfitOrLoss>> GetAnnualProfitOrLossWithSearching(
+        QueryParameters queryParameters)
+        {
+            IQueryable<AnnualProfitOrLoss> annualProfitOrLoss = _context.AnnualProfitsOrLosses.AsQueryable()
+                                                                .OrderBy(x => x.Year);
+            
+            if (queryParameters.HasQuery())
+            {
+                annualProfitOrLoss = annualProfitOrLoss
+                .Where(t => t.Year.ToString().Contains(queryParameters.Query));            
+            }
+            
+            return await Task.FromResult(annualProfitOrLoss);        
+        }
+
+        public async Task<IQueryable<AnnualProfitOrLoss>> GetAnnualProfitOrLossWithPaging(QueryParameters queryParameters)
+        {
+            var annualProfitOrLoss = await GetAnnualProfitOrLossWithSearching(queryParameters);
+
+            annualProfitOrLoss = annualProfitOrLoss.Skip(queryParameters.PageCount * (queryParameters.Page - 1))
+                                 .Take(queryParameters.PageCount);
+            
+            return await Task.FromResult(annualProfitOrLoss);     
+        }
+
         public async Task ActionsRegardingProfitOrLossCardUponLogin(string email)
         {
-            var card = await FindCardByEmail(email);
+            var card = await FindUnlockedCardByEmail(email);
 
-             if (_context.AnnualProfitsOrLosses.Where(x => x.Email == email && x.Locked == false).Any())
+            if (_context.AnnualProfitsOrLosses.Where(x => x.Email == email && x.Locked == false).Any())
             {
                 if (DateTime.Now.Year > card.Year)
                 {
@@ -46,7 +73,7 @@ namespace Infrastructure.Services
 
         public async Task ActionsRegardingProfitOrLossCardUponSelling(string email)
         {
-            var card = await FindCardByEmail(email);
+            var card = await FindUnlockedCardByEmail(email);
 
             if (DateTime.Now.Year == card.Year)
             {
@@ -57,13 +84,13 @@ namespace Infrastructure.Services
             {
                 await LockExistingCard(card);
 
-                await CreateNewCard(email);
+                await CreateNewCardAndUpdateIt(email);                
             }          
         }     
 
         public async Task TwoYearException(string email, StockTransaction transaction)
         {
-            var card = await FindCardByEmail(email);
+            var card = await FindUnlockedCardByEmail(email);
 
             decimal basket = 0;
             var today = transaction.Date;
@@ -96,10 +123,95 @@ namespace Infrastructure.Services
             await _context.SaveChangesAsync();
         }
 
-        private async Task<AnnualProfitOrLoss> FindCardByEmail(string email)
+        public async Task<AnnualTaxLiabilityDto> ShowTaxLiability(string email, int id)
+        {
+            var card = await FindUnlockedCardByEmail(email);
+
+            var surtax = await FindSurtaxById(id);
+
+            var final = new AnnualTaxLiabilityDto();
+
+            decimal f = 100;
+            decimal? basket = card.TaxableIncome;;
+            decimal? basket1 = (12 / f) * basket;
+
+            final.Email = email;
+            final.Amount = card.Amount;
+            final.TaxableIncome = card.TaxableIncome;
+            final.Year = card.Year;
+            final.Residence = surtax.Residence;
+            final.SurtaxPercentage = surtax.Amount;
+
+            if (basket.HasValue && basket > 0)
+            {
+                final.CapitalGainsTax = basket1;
+            }
+             else
+            {
+                final.CapitalGainsTax = 0;
+            }
+
+            if (basket.HasValue && basket > 0)
+            {
+                final.SurtaxAmount = (surtax.Amount / f) * basket1;
+            }
+            else
+            {
+                final.SurtaxAmount = 0;
+            }
+
+            if (basket.HasValue && basket > 0)
+            {
+                final.TotalTaxLiaility = basket1 + final.SurtaxAmount;
+            }
+            else
+            {
+                final.TotalTaxLiaility = 0;
+            }
+
+            if (basket.HasValue && basket > 0)
+            {
+                final.NetProfit = basket - final.TotalTaxLiaility;
+            }
+            else
+            {
+                final.NetProfit = 0;
+            }
+
+            return final;
+        }
+     
+        public async Task<AnnualTaxLiabilityDto> ShowAnnual(string email)
+        {
+            var card = await FindUnlockedCardByEmail(email);
+
+            var final = new AnnualTaxLiabilityDto();
+
+            final.Email = email;
+            final.Amount = card.Amount;
+            final.TaxableIncome = card.TaxableIncome;
+            final.Year = card.Year;
+          
+            return final;
+        }
+
+        public async Task<IEnumerable<AnnualProfitOrLoss>> ShowListOfAnnualProfitAndLoss(string email)
+        {
+            var list = await _context.AnnualProfitsOrLosses.Where(x => x.Email == email).ToListAsync();
+
+            return list;
+        } 
+     
+        private async Task<AnnualProfitOrLoss> FindUnlockedCardByEmail(string email)
         {
             return await _context.AnnualProfitsOrLosses
-                         .Where(a => a.Email == email && a.Locked == false).FirstOrDefaultAsync();
+                         .Where(x => x.Email == email && x.Locked == false)
+                         .FirstOrDefaultAsync();
+        }
+        private async Task<Surtax> FindSurtaxById(int id)
+        {
+            return await _context.Surtaxes.Where(x => x.Id == id)
+                         .FirstOrDefaultAsync();
         }
 
         private async Task CreateNewCard(string email)
@@ -118,11 +230,41 @@ namespace Infrastructure.Services
             await _context.SaveChangesAsync();       
         }
 
+        private async Task CreateNewCardAndUpdateIt(string email)
+        {
+            var card = new AnnualProfitOrLoss
+            {
+                Year = DateTime.Now.Year,
+                TaxableIncome = 0,
+                TaxExemption = 0,
+                Amount = 0,
+                Email = email,
+                Locked = false
+            };
+
+            _context.AnnualProfitsOrLosses.Add(card);
+            await _context.SaveChangesAsync(); 
+
+            card.Amount = await CalculateAmount(email);  
+
+            if (card.Amount > 0)
+            {
+                card.TaxableIncome = card.Amount - card.TaxExemption;             
+            }
+            else
+            {
+                card.TaxableIncome = 0;
+            }
+
+            _context.Entry(card).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+        }
+        
         private async Task UpdateCard(AnnualProfitOrLoss card, string email)
         {
             card.Year = DateTime.Now.Year;
             card.Email = email;
-            card.Amount = await TotalNetProfitOrLossForCurrentYear(email);
+            card.Amount = await CalculateAmount(email);
 
             if (card.Amount > 0)
             {
@@ -148,7 +290,7 @@ namespace Infrastructure.Services
 
         private async Task LockExistingCardAndCreateNew(string email)
         {
-            var card = await FindCardByEmail(email);
+            var card = await FindUnlockedCardByEmail(email);
       
             if (_context.AnnualProfitsOrLosses.Where(x => x.Email == email && x.Locked == false).Any())                          
             {
@@ -161,9 +303,9 @@ namespace Infrastructure.Services
             }
         }      
 
-        private async Task<decimal?> TotalNetProfitOrLossForCurrentYear(string email)
+        private async Task<decimal?> TotalNetProfitOrLoss(string email)
         { 
-            var card = await FindCardByEmail(email);
+            var card = await FindUnlockedCardByEmail(email);
             
             int currentYear = card.Year;
             decimal? basket = 0;
@@ -237,6 +379,26 @@ namespace Infrastructure.Services
             }
             return result;
         }  
+
+        private async Task<decimal?> CalculateAmount(string email)
+        {            
+            var card = await FindUnlockedCardByEmail(email);
+
+            var list = await _context.AnnualProfitsOrLosses
+                             .Where(x => x.Email == email && x.Locked == true).ToListAsync();
+            
+            decimal? basket = 0;
+            decimal? basket1 = await TotalNetProfitOrLoss(email);
+
+            if (_context.AnnualProfitsOrLosses.Where(x => x.Email == email && x.Locked == true).Any())
+            {
+                foreach (var item in list)
+                {                  
+                        basket += item.Amount;                   
+                }
+            }
+            return basket1 - basket;
+        }
     }
 }
 

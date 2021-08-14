@@ -40,6 +40,11 @@ namespace Infrastructure.Services
             
             return await Task.FromResult(surtax);     
         }
+
+        public async Task<IEnumerable<Surtax>> ListAllSurtaxes()
+        {
+            return await _context.Surtaxes.OrderBy(s => s.Residence).ToListAsync();
+        }
         
         public async Task<Surtax> GetSurtaxByIdAsync(int id)
         {

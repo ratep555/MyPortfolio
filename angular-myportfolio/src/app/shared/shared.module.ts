@@ -7,7 +7,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { PagerComponent } from './components/pager/pager.component';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
 import { TextInputComponent } from './components/text-input/text-input.component';
-
+import { GoogleChartsModule } from 'angular-google-charts';
 
 @NgModule({
   declarations: [
@@ -21,7 +21,9 @@ import { TextInputComponent } from './components/text-input/text-input.component
     PaginationModule.forRoot(),
     TypeaheadModule.forRoot(),
     BsDropdownModule.forRoot(),
-    CarouselModule.forRoot()
+    CarouselModule.forRoot(),
+    GoogleChartsModule.forRoot({ mapsApiKey: 'AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY' })
+
   ],
   exports: [
     PaginationModule,
@@ -30,7 +32,8 @@ import { TextInputComponent } from './components/text-input/text-input.component
     PagerComponent,
     CarouselModule,
     ReactiveFormsModule,
-    TextInputComponent
+    TextInputComponent,
+    GoogleChartsModule
   ]
 })
 export class SharedModule { }

@@ -1,3 +1,4 @@
+import { IAnnualProfitOrLoss } from './annual';
 import { ICategory } from './category';
 import { IModality } from './modality';
 import { ISegment } from './segment';
@@ -53,6 +54,13 @@ export interface IPaginationForUser {
     pageCount: number;
     count: number;
     data: IUser1[];
+  }
+
+export interface IPaginationForAnnual {
+    page: number;
+    pageCount: number;
+    count: number;
+    data: IAnnualProfitOrLoss[];
   }
 
 

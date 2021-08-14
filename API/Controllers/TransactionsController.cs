@@ -59,7 +59,7 @@ namespace API.Controllers
 
             await _transactionService.UpdateResolved(id, email);    
 
-           // await _annualReviewService.TwoYearException(email, transaction);
+            await _annualReviewService.TwoYearException(email, transaction);
 
             await _annualReviewService.ActionsRegardingProfitOrLossCardUponSelling(email);
 

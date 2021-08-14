@@ -6,10 +6,12 @@ using Core.Dtos;
 using Core.Entities;
 using Core.Interfaces;
 using Core.Paging;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    [Authorize]
     public class SurtaxesController : BaseApiController
     {
         private readonly ISurtaxService _surtaxService;
@@ -31,6 +33,14 @@ namespace API.Controllers
 
             return Ok(new Pagination<SurtaxDto>
             (queryParameters.Page, queryParameters.PageCount, surtaxes.Count(), data));
+        }
+
+        [HttpGet("getsurtaxes")]
+        public async Task<ActionResult<IEnumerable<Surtax>>> GetSurtaxesForTypeahead()
+        {
+            var list = await _surtaxService.ListAllSurtaxes();
+
+            return Ok(list);
         }
 
         [HttpGet("{id}")]       

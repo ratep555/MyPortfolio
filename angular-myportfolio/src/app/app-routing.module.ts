@@ -26,6 +26,8 @@ const routes: Routes = [
   loadChildren: () => import('./myportfolio/myportfolio.module').then(mod => mod.MyportfolioModule)},
   {path: 'transactions', canActivate: [AuthGuard],
   loadChildren: () => import('./transaction/transaction.module').then(mod => mod.TransactionModule)},
+  {path: 'annual', canActivate: [AuthGuard],
+  loadChildren: () => import('./annualreview/annualreview.module').then(mod => mod.AnnualreviewModule)},
 
   {path: 'account', loadChildren: () => import('./account/account.module').then(mod => mod.AccountModule)},
   {path: '**', redirectTo: '', pathMatch: 'full'}

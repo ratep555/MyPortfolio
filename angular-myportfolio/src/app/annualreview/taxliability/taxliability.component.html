@@ -1,0 +1,110 @@
+<div class="container" style="margin-top: 200px;">   
+    <div class="container mt-5 mb-3">
+        <div class="row">
+                <div class="form-inline pull-left">
+                    <form [formGroup]="surtaxForm" (ngSubmit)="onSubmit()">
+                        <input
+                        formControlName="residence"
+                        [typeahead]="surtaxes"
+                        typeaheadOptionField="residence"
+                        [typeaheadOptionsInScrollableView]="5"
+                        [typeaheadScrollable]="true"
+                        (typeaheadOnSelect)="onSelect($event)"
+                        placeholder="Choose your residence"
+                        class="form-control"
+                        style="width: 250px;">  
+                        <button class="btn btn-info ml-2">
+                          <i class="fa fa-search mr-1" aria-hidden="true">Find</i>
+                        </button>   
+                          </form>           
+                         </div>    
+            <div class="col-md-10">
+                <table class="center table table-bordered table-striped table-condensed table-hover">
+                    <thead>
+                      <tr>
+                          <th>
+                            Email:
+                          </th>
+                          <th>
+                             {{annual?.email}}
+                          </th>
+                      </tr>
+                      <tr>
+                          <th>
+                            Year:
+                          </th>
+                          <th>
+                             {{annual?.year}}
+                          </th>
+                      </tr>
+                        <tr>
+                            <th>
+                              Total Gross Profit:
+                            </th>
+                            <th>
+                               {{annual?.amount | number: '1.2-2'}} kn
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>
+                              Taxable Income:
+                            </th>
+                            <th>
+                               {{annual?.taxableIncome | number: '1.2-2'}} kn
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>
+                              Capital Gains Tax (12% Universally on Naional Level):
+                            </th>
+                            <th>
+                          {{annual?.capitalGainsTax | number: '1.2-2'}} 
+                      </th>
+                        </tr>
+                        <tr>
+                          <th>
+                            Residence:
+                          </th>
+                          <th>
+                             {{annual?.residence}}
+                          </th>
+                      </tr>
+                        <tr>
+                            <th>
+                              Surtax:
+                            </th>
+                            <th>
+                               {{annual?.surtaxAmount | number: '1.2-2'}} 
+                            </th>
+                        </tr>
+                         <tr>
+                            <th>
+                              Surtax Percentage (Depending on Residence):
+                            </th>
+                            <th>
+                               {{annual?.surtaxPercentage}}
+                            </th>
+                        </tr> 
+                        <tr>
+                          <th>
+                              Total Tax Liability:
+                          </th>
+                          <th>
+                              {{annual?.totalTaxLiaility | number: '1.2-2'}} 
+                          </th>
+                        </tr>
+                        <tr>
+                            <th>
+                              Total Net Profit:
+                            </th>
+                            <th>
+                               {{annual?.netProfit | number: '1.2-2'}} 
+                            </th>
+                        </tr>
+                    </thead>
+                    </table>
+            </div>      
+          </div>
+     </div>
+</div>
+

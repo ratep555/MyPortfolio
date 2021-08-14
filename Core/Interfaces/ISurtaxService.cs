@@ -9,6 +9,7 @@ namespace Core.Interfaces
     {
         Task<IQueryable<Surtax>> GetSurtaxesWithSearching(QueryParameters queryParameters);
         Task<IQueryable<Surtax>> GetSurtaxesWithPaging(QueryParameters queryParameters);
+        Task<IEnumerable<Surtax>> ListAllSurtaxes();
         Task<Surtax> GetSurtaxByIdAsync(int id);
         Task CreateSurtax(Surtax surtax);
         Task UpdateSurtax(Surtax surtax);

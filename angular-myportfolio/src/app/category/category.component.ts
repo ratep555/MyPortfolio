@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ICategory } from '../shared/models/category';
 import { MyParams } from '../shared/models/myparams';
 import { CategoryService } from './category.service';
+import Swal from 'sweetalert2/dist/sweetalert2.js';
 
 @Component({
   selector: 'app-category',
@@ -57,17 +58,25 @@ export class CategoryComponent implements OnInit {
 }
 
 onDelete(id: number) {
-  if (confirm('Are you sure you want to delete this record?')) {
-    this.categoryService.deleteCategory(id)
-      .subscribe(
-        res => {
-          this.getCategories();
-          this.toastr.error('Deleted successfully!');
-        },
-        err => { console.log(err);
-         }
-      );
+  Swal.fire({
+    title: 'Are you sure want to delete this record?',
+    text: 'You will not be able to recover it afterwards!',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, delete it!',
+    confirmButtonColor: '#DD6B55',
+    cancelButtonText: 'No, keep it'
+  }).then((result) => {
+    if (result.value) {
+        this.categoryService.deleteCategory(id)
+    .subscribe(
+      res => {
+        this.getCategories();
+        this.toastr.error('Deleted successfully!');
+      }, err => { console.log(err);
+       });
   }
+});
 }
 
 }

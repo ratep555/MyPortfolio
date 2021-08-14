@@ -4,6 +4,7 @@ import { IStock } from '../shared/models/stock';
 import { MyParams } from '../shared/models/myparams';
 import { StockService } from './stock.service';
 import { ToastrService } from 'ngx-toastr';
+import Swal from 'sweetalert2/dist/sweetalert2.js';
 
 @Component({
   selector: 'app-stock',
@@ -57,17 +58,25 @@ export class StockComponent implements OnInit {
 }
 
 onDelete(id: number) {
-  if (confirm('Are you sure you want to delete this record?')) {
-    this.stockService.deleteStock(id)
-      .subscribe(
-        res => {
-          this.getStocks();
-          this.toastr.error('Deleted successfully!');
-        },
-        err => { console.log(err);
-         }
-      );
+  Swal.fire({
+    title: 'Are you sure want to delete this record?',
+    text: 'You will not be able to recover it afterwards!',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, delete it!',
+    confirmButtonColor: '#DD6B55',
+    cancelButtonText: 'No, keep it'
+  }).then((result) => {
+    if (result.value) {
+        this.stockService.deleteStock(id)
+    .subscribe(
+      res => {
+        this.getStocks();
+        this.toastr.error('Deleted successfully!');
+      }, err => { console.log(err);
+       });
   }
+});
 }
 
   onRefresh() {

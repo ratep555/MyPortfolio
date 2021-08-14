@@ -27,6 +27,11 @@ namespace API.Helpers
             CreateMap<Surtax, SurtaxDto>().ReverseMap();
 
             CreateMap<StockTransaction, TransactionDto>().ReverseMap();
+
+            CreateMap<AnnualProfitOrLoss, AnnualProfitOrLossDto>().ReverseMap();
         }
     }
 }
+
+
+

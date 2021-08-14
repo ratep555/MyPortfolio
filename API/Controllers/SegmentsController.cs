@@ -6,10 +6,12 @@ using Core.Dtos;
 using Core.Entities;
 using Core.Interfaces;
 using Core.Paging;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    [Authorize]
     public class SegmentsController : BaseApiController
     {
         private readonly ISegmentService _segmentService;

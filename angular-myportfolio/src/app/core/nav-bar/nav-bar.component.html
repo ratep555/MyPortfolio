@@ -10,7 +10,7 @@
         <a class="p-2" routerLink="/usertransactions" routerLinkActive="active" >List of Stocks</a>
         <a class="p-2"  routerLink="/myportfolio" routerLinkActive="active">My Portfolio</a>
         <a class="p-2" routerLink="/transactions" routerLinkActive="active">Transactions</a>
-        <a class="p-2" routerLink="/taxliability" routerLinkActive="active">Tax Liability</a>
+        <a class="p-2" routerLink="/annual/taxliability" routerLinkActive="active">Tax Liability</a>
     </nav>
     <div class="d-flex align-items-center">      
         <ng-container *ngIf="(currentUser$ | async) === null">
@@ -67,22 +67,10 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-right stark" style="cursor: pointer;" *dropdownMenu>
                    <a class="dropdown-items d-flex align-items-center py-2">
-                  <a routerLink="/taxliability/tax">
-                    <i class="fa fa-balance-scale mr-3 ml-3"></i> Tax Liability
+                  <a routerLink="/annual">
+                    <i class="fa fa-list mr-3 ml-3"></i> Profit/Loss List
                   </a>  
                    </a>
-                   <div class="dropdown-divider"></div>
-                   <a routerLink="/taxliability/taxy">
-                    <i class="fa fa-balance-scale mr-3 ml-3"></i> Tax Liability1
-                   </a>  
-                   <div class="dropdown-divider"></div>
-                   <a routerLink="/taxliability/taxyimo">
-                    <i class="fa fa-balance-scale mr-3 ml-3"></i> Tax Liability2
-                   </a>  
-                   <div class="dropdown-divider"></div>
-                   <a routerLink="/charts">
-                     <i class="fa fa-user mr-3 ml-3"></i> Charts
-                   </a>  
                    <div class="dropdown-divider"></div>
                    <a (click)="logout()" class="dropdown-items d-flex align-items-center py-2" >
                     <i class="fa fa-sign-out mr-4 ml-3"></i> Logout
