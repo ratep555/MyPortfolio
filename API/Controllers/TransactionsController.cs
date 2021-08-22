@@ -50,16 +50,16 @@ namespace API.Controllers
         {     
             var email = User.RetrieveEmailFromPrincipal();
 
-            if(await _transactionService.TotalQuantity(email, id) < transactionDto.Quantity)
+            if (await _transactionService.TotalQuantity(email, id) < transactionDto.Quantity)
             {
                 return BadRequest("You are selling more than you have!");
             }
 
             var transaction = await _transactionService.SellStockAsync(transactionDto, id, email);
 
-            await _transactionService.UpdateResolved(id, email);    
-
             await _annualReviewService.TwoYearException(email, transaction);
+
+            await _transactionService.UpdateResolved(id, email);    
 
             await _annualReviewService.ActionsRegardingProfitOrLossCardUponSelling(email);
 

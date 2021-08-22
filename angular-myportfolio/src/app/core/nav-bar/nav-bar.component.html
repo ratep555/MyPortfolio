@@ -1,82 +1,82 @@
-<header
-    class="d-flex flex-column flex-md-row align-items-center justify-content-between p-3 
-    px-md-4 mb-3 bg-white border-bottom shadow-sm fixed-top">
-    <img src="/assets/images/dollar1.jpg" style="max-height: 70px; cursor: pointer; 
-    outline: none;" alt="logo" class="logo img-fluid"
-    routerLink="/">
-    <nav class="my-2 my-md-0 me-md-3 text-uppercase" style="font-size: larger;">
-        <a class="p-2" [routerLink]="['/']" routerLinkActive="active" 
-        [routerLinkActiveOptions]="{exact:true}" >Home</a>
-        <a class="p-2" routerLink="/usertransactions" routerLinkActive="active" >List of Stocks</a>
-        <a class="p-2"  routerLink="/myportfolio" routerLinkActive="active">My Portfolio</a>
-        <a class="p-2" routerLink="/transactions" routerLinkActive="active">Transactions</a>
-        <a class="p-2" routerLink="/annual/taxliability" routerLinkActive="active">Tax Liability</a>
-    </nav>
-    <div class="d-flex align-items-center">      
-        <ng-container *ngIf="(currentUser$ | async) === null">
-            <a routerLink="/account/login" class="btn btn-outline-secondary mr-2" href="#">Login</a>
-            <a routerLink="/account/register" class="btn btn-outline-secondary mr-3" href="#">Sign up</a>
-        </ng-container>
-          <ng-container *ngIf="(currentUser$ | async) && (currentUser$ | async)?.roleName==='Admin'">
-        <div class="dropdown ml-3 mr-5" dropdown>
-          <a class="dropdown-toggle park" style="cursor: pointer;" dropdownToggle>
-             <strong>Welcome {{(currentUser$ | async).roleName}} </strong> 
-          </a>
-          <div class="dropdown-menu dropdown-menu-right stark" style="cursor: pointer;" *dropdownMenu>
-             <a class="dropdown-items d-flex align-items-center py-2">
-             </a>
-             <a routerLink="/categories">
-               <i class="fa fa-list mr-3 ml-3"></i> Categories
-             </a>  
-             <div class="dropdown-divider"></div>
-             <a routerLink="/modalities">
-               <i class="fa fa-list mr-3 ml-3"></i> Modalities
-             </a>  
-             <div class="dropdown-divider"></div>
-             <a routerLink="/segments">
-               <i class="fa fa-list mr-3 ml-3"></i> Segments
-             </a>  
-             <div class="dropdown-divider"></div>
-             <a routerLink="/stocks">
-              <i class="fa fa-list mr-3 ml-3"></i> Stocks
-            </a>  
-             <div class="dropdown-divider"></div>
-             <a routerLink="/surtaxes">
-               <i class="fa fa-list mr-3 ml-3"></i> Surtaxes
-             </a>  
-             <div class="dropdown-divider"></div>
-             <a routerLink="/typesofstock">
-               <i class="fa fa-list mr-3 ml-3"></i> Types
-             </a>  
-             <div class="dropdown-divider"></div>
-             <a routerLink="/users">
-               <i class="fa fa-user mr-4 ml-3"></i> Users
-             </a>              
-             <div class="dropdown-divider"></div>
-             <a (click)="logout()" class="dropdown-items d-flex align-items-center py-2" >
-              <i class="fa fa-sign-out mr-4 ml-3"></i> Logout
-             </a>
-          </div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+  <a class="navbar-brand text-uppercase" style="margin-left: 40px;" [routerLink]="['/']" routerLinkActive="active" 
+  [routerLinkActiveOptions]="{exact:true}">Home</a>
+
+  <button class="navbar-toggler" type="button" 
+  data-toggle="collapse" data-target="#navbarNav" 
+  (click)="isCollapsed = !isCollapsed"
+  [attr.aria-expanded]="!isCollapsed"
+  aria-controls="navbarSupportedContent" 
+  aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarNav" id="navbarSupportedContent" [collapse]="isCollapsed">
+    <ul class="navbar-nav mr-auto text-uppercase">
+      <li class="nav-item">
+        <a class="nav-link" style="margin-left: 250px;" routerLink="/usertransactions" routerLinkActive="active" >List of Stocks</a> 
+      </li>  
+      <li class="nav-item">
+        <a class="nav-link"  routerLink="/myportfolio" routerLinkActive="active">My Portfolio</a>  
+      </li>  
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/transactions" routerLinkActive="active">Transactions</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link"routerLink="/annual/taxliability" routerLinkActive="active">Tax Liability</a>
+      </li>
+    </ul>
+
+    <div>
+    <ul class="nav navbar-nav">
+      <li *ngIf="(currentUser$ | async) === null" class="nav-item">
+        <a class="nav-link"
+        routerLink="/account/register"
+        routerLinkActive="active"
+        >Register</a>
+      </li>
+      <li *ngIf="(currentUser$ | async) === null" class="nav-item">
+        <a class="nav-link"
+        routerLink="/account/login"
+        routerLinkActive="active"
+        >Login</a>
+      </li>
+
+      <div *ngIf="(currentUser$ | async) && (currentUser$ | async)?.roleName ==='Admin'" class="dropdown mr-5" dropdown>
+        <a href="#" class="dropdown-toggle text-white" dropdownToggle (click)="false">
+          <strong>Welcome {{(currentUser$ | async).roleName}} </strong> 
+        </a>
+        <div class="dropdown-menu" *dropdownMenu>
+            <a routerLink="/categories" href="#" class="dropdown-item">
+              <i class="fa fa-list mr-3"></i> Categories</a>                
+            <a routerLink="/modalities" href="#" class="dropdown-item">
+              <i class="fa fa-list mr-3"></i> Modalities </a>                
+            <a routerLink="/segments" href="#" class="dropdown-item">
+              <i class="fa fa-list mr-3"></i> Segments </a>                
+            <a routerLink="/stocks" href="#" class="dropdown-item">
+              <i class="fa fa-list mr-3"></i> Stocks </a>                
+            <a routerLink="/surtaxes" href="#" class="dropdown-item">
+              <i class="fa fa-list mr-3"></i> Surtaxes </a>                
+            <a routerLink="/typesofstock" href="#" class="dropdown-item">
+              <i class="fa fa-list mr-3"></i> Types </a>                
+            <a routerLink="/users" href="#" class="dropdown-item">
+              <i class="fa fa-user mr-3"></i> Users </a>                             
+            <a (click)='logout()' class="dropdown-item">
+              <i class="fa fa-sign-out mr-3"></i> Logout</a>
+        </div>
       </div>
-       </ng-container>
-        
- <ng-container *ngIf="(currentUser$ | async) && (currentUser$ | async)?.roleName!=='Admin'">
-            <div class="dropdown ml-3 mr-5" dropdown>
-                <a class="dropdown-toggle park" style="cursor: pointer;" dropdownToggle>
-                   <strong>Welcome {{(currentUser$ | async).displayName}} </strong> 
-                </a>
-                <div class="dropdown-menu dropdown-menu-right stark" style="cursor: pointer;" *dropdownMenu>
-                   <a class="dropdown-items d-flex align-items-center py-2">
-                  <a routerLink="/annual">
-                    <i class="fa fa-list mr-3 ml-3"></i> Profit/Loss List
-                  </a>  
-                   </a>
-                   <div class="dropdown-divider"></div>
-                   <a (click)="logout()" class="dropdown-items d-flex align-items-center py-2" >
-                    <i class="fa fa-sign-out mr-4 ml-3"></i> Logout
-                   </a>
-                </div>
-            </div>
-        </ng-container>
-    </div>
-</header>
+      <div *ngIf="(currentUser$ | async) && (currentUser$ | async)?.roleName !=='Admin'" class="dropdown mr-5" dropdown>
+        <a href="#" class="dropdown-toggle text-white" dropdownToggle (click)="false">
+          <strong>Welcome {{(currentUser$ | async).displayName}} </strong> 
+        </a>
+        <div class="dropdown-menu" *dropdownMenu>
+            <a routerLink="/annual" href="#" class="dropdown-item">
+              <i class="fa fa-list mr-3"></i> Profit/Loss List</a>                                             
+            <a (click)='logout()' class="dropdown-item">
+              <i class="fa fa-sign-out mr-3"></i> Logout</a>
+        </div>
+      </div>
+    </ul>
+  </div>
+</div>
+</nav>

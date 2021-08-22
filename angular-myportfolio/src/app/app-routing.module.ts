@@ -3,23 +3,37 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { AuthGuard } from './core/guards/auth.guard';
 
-
 const routes: Routes = [
   {path: '', component: HomeComponent},
+
   {path: 'stocks', canActivate: [AuthGuard],
-  loadChildren: () => import('./stock/stock.module').then(mod => mod.StockModule)},
+  loadChildren: () => import('./stock/stock.module').then(mod => mod.StockModule),
+  data: { roleName: 'Admin' }},
+
   {path: 'categories', canActivate: [AuthGuard],
-  loadChildren: () => import('./category/category.module').then(mod => mod.CategoryModule)},
+  loadChildren: () => import('./category/category.module').then(mod => mod.CategoryModule),
+  data: { roleName: 'Admin' }},
+
   {path: 'modalities', canActivate: [AuthGuard],
-  loadChildren: () => import('./modality/modality.module').then(mod => mod.ModalityModule)},
+  loadChildren: () => import('./modality/modality.module').then(mod => mod.ModalityModule),
+  data: { roleName: 'Admin' }},
+
   {path: 'segments', canActivate: [AuthGuard],
-  loadChildren: () => import('./segment/segment.module').then(mod => mod.SegmentModule)},
+  loadChildren: () => import('./segment/segment.module').then(mod => mod.SegmentModule),
+  data: { roleName: 'Admin' }},
+
   {path: 'surtaxes', canActivate: [AuthGuard],
-  loadChildren: () => import('./surtax/surtax.module').then(mod => mod.SurtaxModule)},
+  loadChildren: () => import('./surtax/surtax.module').then(mod => mod.SurtaxModule),
+  data: { roleName: 'Admin' }},
+
   {path: 'typesofstock', canActivate: [AuthGuard],
-  loadChildren: () => import('./type-of-stock/type-of-stock.module').then(mod => mod.TypeOfStockModule)},
+  loadChildren: () => import('./type-of-stock/type-of-stock.module').then(mod => mod.TypeOfStockModule),
+  data: { roleName: 'Admin' }},
+
   {path: 'users', canActivate: [AuthGuard],
-  loadChildren: () => import('./user/user.module').then(mod => mod.UserModule)},
+  loadChildren: () => import('./user/user.module').then(mod => mod.UserModule),
+  data: { roleName: 'Admin' }},
+
   {path: 'usertransactions', canActivate: [AuthGuard],
   loadChildren: () => import('./usertransactions/usertransactions.module').then(mod => mod.UsertransactionsModule)},
   {path: 'myportfolio', canActivate: [AuthGuard],

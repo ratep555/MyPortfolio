@@ -4,9 +4,7 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { RouterModule } from '@angular/router';
 import { ToastrModule } from 'ngx-toastr';
 import { SharedModule } from '../shared/shared.module';
-
-
-
+import { CollapseModule } from 'ngx-bootstrap/collapse';
 
 @NgModule({
   declarations: [NavBarComponent],
@@ -17,7 +15,9 @@ import { SharedModule } from '../shared/shared.module';
     ToastrModule.forRoot({
       positionClass: 'toast-bottom-right',
       preventDuplicates: true
-    })
+    }),
+    CollapseModule.forRoot()
+
   ],
   exports: [
     NavBarComponent

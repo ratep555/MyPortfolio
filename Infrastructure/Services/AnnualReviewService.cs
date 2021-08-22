@@ -101,25 +101,23 @@ namespace Infrastructure.Services
 
             foreach (var item in _context.Stocks.Where(x => x.Id == transaction.StockId).ToList())
             {
-                  if (transactionOlderThenTwoyears.Date < transaction.Date.AddYears(-2))
-                  {
-                    decimal sumOfLastSelling = _context.StockTransactions.Where(x => x.Email == email && x.StockId == item.Id && x.Purchase == false)
-                                .OrderByDescending(x => x.Date).Take(1).Select(x => x.Quantity * x.Price).Sum();
+                if (transactionOlderThenTwoyears.Date < transaction.Date.AddYears(-2))
+                {
+                    decimal sumOfLastSelling = transaction.Quantity * transaction.Price;
 
-                    int quantityOfLastSelling = _context.StockTransactions.Where(x => x.Email == email && x.StockId == item.Id && x.Purchase == false)
-                            .OrderByDescending(x => x.Date).Take(1).Select(x => x.Quantity).Sum();
+                    int quantityOfLastSelling = transaction.Quantity;
 
-                    var list1 = _context.StockTransactions.Where(x => x.Purchase == true && x.Resolved > 0 && x.StockId == item.Id);
+                    var list1 = _context.StockTransactions.Where(x => x.Purchase == true  && x.Resolved != 0  && x.StockId == item.Id);
 
                     decimal sumOfFirstPurchase = SumOfLastTransactions(list1, quantityOfLastSelling);
 
                     basket += (sumOfLastSelling - sumOfFirstPurchase);  
-                 }
+                }
             }  
 
             card.TaxExemption += basket;
 
-             _context.Entry(card).State = EntityState.Modified;
+            _context.Entry(card).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
 
@@ -315,7 +313,7 @@ namespace Infrastructure.Services
             int num = 0;
            
             foreach (var item in _context.Stocks.ToList())
-            {                               
+            {                              
                 var listOfLeftovers = await _context.StockTransactions.Where(x => x.Email == email 
                                             && x.StockId == item.Id && x.Resolved != 0 && x.Purchase == true)
                                             .OrderByDescending(x => x.Id).ToListAsync();
@@ -394,7 +392,7 @@ namespace Infrastructure.Services
             {
                 foreach (var item in list)
                 {                  
-                        basket += item.Amount;                   
+                    basket += item.Amount;                   
                 }
             }
             return basket1 - basket;
