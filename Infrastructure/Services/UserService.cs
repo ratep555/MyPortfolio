@@ -30,8 +30,8 @@ namespace Infrastructure.Services
             return roleName;
         }
 
-        public async Task<IQueryable<UserToReturnDto>> GetUsersWithSearching
-        (QueryParameters queryParameters, string email)
+        public async Task<IQueryable<UserToReturnDto>> GetUsersWithSearching(
+            QueryParameters queryParameters, string email)
         {
             IQueryable<UserToReturnDto> user = (from u in _context.Users.Where(u => u.Email != email)
                                                join a in _context.AppUsers on u.Id equals a.Id                            
@@ -52,8 +52,8 @@ namespace Infrastructure.Services
             return await Task.FromResult(user);     
         }
 
-        public async Task<IQueryable<UserToReturnDto>> GetUsersWithPaging
-        (QueryParameters queryParameters, string email)
+        public async Task<IQueryable<UserToReturnDto>> GetUsersWithPaging(
+            QueryParameters queryParameters, string email)
         {
             var user = await GetUsersWithSearching(queryParameters, email);
 

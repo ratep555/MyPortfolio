@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class SurtaxesController : BaseApiController
     {
         private readonly ISurtaxService _surtaxService;
@@ -24,7 +24,7 @@ namespace API.Controllers
 
         [HttpGet]
         public async Task<ActionResult<Pagination<SurtaxDto>>> GetAllSurtaxes(
-        [FromQuery] QueryParameters queryParameters)
+            [FromQuery] QueryParameters queryParameters)
         {
             var surtaxes = await _surtaxService.GetSurtaxesWithSearching(queryParameters);
             var list = await _surtaxService.GetSurtaxesWithPaging(queryParameters);
@@ -34,7 +34,8 @@ namespace API.Controllers
             return Ok(new Pagination<SurtaxDto>
             (queryParameters.Page, queryParameters.PageCount, surtaxes.Count(), data));
         }
-
+        
+        [AllowAnonymous]
         [HttpGet("getsurtaxes")]
         public async Task<ActionResult<IEnumerable<Surtax>>> GetSurtaxesForTypeahead()
         {
@@ -54,7 +55,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<SurtaxDto>> CreateSegment([FromBody] SurtaxDto surtaxDTO)
+        public async Task<ActionResult<SurtaxDto>> CreateSurtax([FromBody] SurtaxDto surtaxDTO)
         {
             var surtax = _mapper.Map<Surtax>(surtaxDTO);
 

@@ -20,9 +20,10 @@ namespace Infrastructure.Services
         }
 
         public async Task<IQueryable<AnnualProfitOrLoss>> GetAnnualProfitOrLossWithSearching(
-        QueryParameters queryParameters)
+            QueryParameters queryParameters, string email)
         {
-            IQueryable<AnnualProfitOrLoss> annualProfitOrLoss = _context.AnnualProfitsOrLosses.AsQueryable()
+            IQueryable<AnnualProfitOrLoss> annualProfitOrLoss = _context.AnnualProfitsOrLosses
+                                                                .Where(x => x.Email == email).AsQueryable()
                                                                 .OrderBy(x => x.Year);
             
             if (queryParameters.HasQuery())
@@ -34,9 +35,10 @@ namespace Infrastructure.Services
             return await Task.FromResult(annualProfitOrLoss);        
         }
 
-        public async Task<IQueryable<AnnualProfitOrLoss>> GetAnnualProfitOrLossWithPaging(QueryParameters queryParameters)
+        public async Task<IQueryable<AnnualProfitOrLoss>> GetAnnualProfitOrLossWithPaging(
+            QueryParameters queryParameters, string email)
         {
-            var annualProfitOrLoss = await GetAnnualProfitOrLossWithSearching(queryParameters);
+            var annualProfitOrLoss = await GetAnnualProfitOrLossWithSearching(queryParameters, email);
 
             annualProfitOrLoss = annualProfitOrLoss.Skip(queryParameters.PageCount * (queryParameters.Page - 1))
                                  .Take(queryParameters.PageCount);
@@ -48,7 +50,7 @@ namespace Infrastructure.Services
         {
             var card = await FindUnlockedCardByEmail(email);
 
-            if (_context.AnnualProfitsOrLosses.Where(x => x.Email == email && x.Locked == false).Any())
+            if (await _context.AnnualProfitsOrLosses.Where(x => x.Email == email && x.Locked == false).AnyAsync())
             {
                 if (DateTime.Now.Year > card.Year)
                 {
@@ -61,7 +63,9 @@ namespace Infrastructure.Services
 
         public async Task ActionsRegardingProfitOrLossCardUponPurchase(string email)
         {
-            if (!_context.StockTransactions.Where(x => x.Email == email).Any())
+            var transactions = await _context.StockTransactions.Where(x => x.Email == email).AnyAsync();
+            
+            if (!transactions)
             {
                 await CreateNewCard(email);                           
             }
@@ -107,7 +111,7 @@ namespace Infrastructure.Services
 
                     int quantityOfLastSelling = transaction.Quantity;
 
-                    var list1 = _context.StockTransactions.Where(x => x.Purchase == true  && x.Resolved != 0  && x.StockId == item.Id);
+                    var list1 = _context.StockTransactions.Where(x => x.Purchase == true  && x.Resolved != x.Quantity  && x.StockId == item.Id);
 
                     decimal sumOfFirstPurchase = SumOfLastTransactions(list1, quantityOfLastSelling);
 
@@ -183,14 +187,20 @@ namespace Infrastructure.Services
         {
             var card = await FindUnlockedCardByEmail(email);
 
-            var final = new AnnualTaxLiabilityDto();
+            if (card != null)
+            {
+                var final = new AnnualTaxLiabilityDto();
 
-            final.Email = email;
-            final.Amount = card.Amount;
-            final.TaxableIncome = card.TaxableIncome;
-            final.Year = card.Year;
+                final.Email = email;
+                final.Amount = card.Amount;
+                final.TaxableIncome = card.TaxableIncome;
+                final.Year = card.Year;
           
-            return final;
+                return final;
+            }
+
+            return new AnnualTaxLiabilityDto() 
+            {Email = email, Year = DateTime.Now.Year, Amount = 0, TaxableIncome = 0};           
         }
 
         public async Task<IEnumerable<AnnualProfitOrLoss>> ShowListOfAnnualProfitAndLoss(string email)
@@ -290,7 +300,7 @@ namespace Infrastructure.Services
         {
             var card = await FindUnlockedCardByEmail(email);
       
-            if (_context.AnnualProfitsOrLosses.Where(x => x.Email == email && x.Locked == false).Any())                          
+            if (await _context.AnnualProfitsOrLosses.Where(x => x.Email == email && x.Locked == false).AnyAsync())                          
             {
                 if (DateTime.Now.Year > card.Year)
                 {
@@ -388,7 +398,7 @@ namespace Infrastructure.Services
             decimal? basket = 0;
             decimal? basket1 = await TotalNetProfitOrLoss(email);
 
-            if (_context.AnnualProfitsOrLosses.Where(x => x.Email == email && x.Locked == true).Any())
+            if (await _context.AnnualProfitsOrLosses.Where(x => x.Email == email && x.Locked == true).AnyAsync())
             {
                 foreach (var item in list)
                 {                  

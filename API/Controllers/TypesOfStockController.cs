@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class TypesOfStockController : BaseApiController
     {
         private readonly ITypeOfStockService _typeOfStockService;
@@ -24,7 +24,7 @@ namespace API.Controllers
 
         [HttpGet]
         public async Task<ActionResult<Pagination<TypeOfStockDto>>> GetAllTypesOfStock(
-        [FromQuery] QueryParameters queryParameters)
+            [FromQuery] QueryParameters queryParameters)
         {
             var typesOfStock = await _typeOfStockService.GetTypesOfStockWithSearching(queryParameters);
             var list = await _typeOfStockService.GetTypesOfStockWithPaging(queryParameters);

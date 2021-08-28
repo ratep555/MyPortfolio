@@ -1,12 +1,15 @@
 thead {
     background-color: lightblue;
 }
+
 tbody:nth-child(even) {
     background-color: lightgrey;
 }
+
 tbody:nth-child(odd) {
     background-color: lightgoldenrodyellow;
 }
+
 .wiki {
     color: orange;
 }
@@ -16,4 +19,8 @@ tbody:nth-child(odd) {
     margin-right: auto;
     width: 57%;
     color: black;
+}
+
+.text-center {
+    color: #e6e600;
 }

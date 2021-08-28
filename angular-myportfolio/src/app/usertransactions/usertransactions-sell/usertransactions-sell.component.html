@@ -14,6 +14,8 @@
             <form [formGroup]="stockForm" (ngSubmit)="onSubmit()">
                 <app-text-input formControlName="price" [label]="'Price'"></app-text-input>
                 <app-text-input formControlName="quantity" [label]="'Quantity'"></app-text-input>    
+                <app-date-input [formControl]='stockForm.controls["dateOfTransaction"]' [label]='"Date of Transaction"'>
+                </app-date-input>   
                 <ul class="text-danger list-unstyled" *ngIf="errors.length > 0">
                     <li *ngFor="let error of errors">{{error}}</li>
                 </ul>      

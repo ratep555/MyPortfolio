@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class ModalitiesController : BaseApiController
     {
         private readonly IModalityService _modalityService;
@@ -24,7 +24,7 @@ namespace API.Controllers
 
         [HttpGet]
         public async Task<ActionResult<Pagination<ModalityDto>>> GetAllModalities(
-        [FromQuery] QueryParameters queryParameters)
+            [FromQuery] QueryParameters queryParameters)
         {
             var modalities = await _modalityService.GetModalitiesWithSearching(queryParameters);
             var list = await _modalityService.GetModalitiesWithPaging(queryParameters);

@@ -38,7 +38,7 @@ namespace API.Controllers
 
         [HttpGet]
         public async Task<ActionResult<Pagination<StockToReturnDto>>> GetAllStocks(
-        [FromQuery] QueryParameters queryParameters)
+            [FromQuery] QueryParameters queryParameters)
         {
             var stocks = await _stockService.GetStocksWithSearching(queryParameters);
             var list = await _stockService.GetStocksWithPaging(queryParameters);

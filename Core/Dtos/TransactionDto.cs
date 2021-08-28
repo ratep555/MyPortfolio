@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Core.Dtos
@@ -14,5 +15,17 @@ namespace Core.Dtos
         public bool Purchase { get; set; }
         public int Resolved { get; set; }
         public string Email { get; set; }
+        
+
+        [DataType(DataType.Date)]
+        public DateTime DateOfTransaction { get; set; }
+
     }
 }
+
+
+
+
+
+
+

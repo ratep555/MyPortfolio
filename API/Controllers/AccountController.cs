@@ -107,10 +107,10 @@ namespace API.Controllers
             };
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpGet("users")]
         public async Task<ActionResult<Pagination<UserToReturnDto>>> GetAllUsers(
-        [FromQuery] QueryParameters queryParameters)
+            [FromQuery] QueryParameters queryParameters)
         {
             var email = User.RetrieveEmailFromPrincipal();
 
@@ -121,7 +121,8 @@ namespace API.Controllers
             (queryParameters.Page, queryParameters.PageCount, users.Count(), list));
         }
 
-         [HttpPut("unlock/{id}")]
+        [Authorize(Roles = "Admin")]
+        [HttpPut("unlock/{id}")]
         public async Task<ActionResult> UnlockUser(string id)
         {
             var user = await _userService.FindUserByIdAsync(id);
@@ -135,6 +136,8 @@ namespace API.Controllers
 
            return Ok();
         }
+
+        [Authorize(Roles = "Admin")]
         [HttpPut("lock/{id}")]
         public async Task<ActionResult> LockUser1(string id)
         {

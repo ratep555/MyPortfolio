@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class SegmentsController : BaseApiController
     {
         private readonly ISegmentService _segmentService;
@@ -25,7 +25,7 @@ namespace API.Controllers
 
         [HttpGet]
         public async Task<ActionResult<Pagination<SegmentDto>>> GetAllSegments(
-        [FromQuery] QueryParameters queryParameters)
+            [FromQuery] QueryParameters queryParameters)
         {
             var segments = await _segmentService.GetSegmentsWithSearching(queryParameters);
             var list = await _segmentService.GetSegmentsWithPaging(queryParameters);

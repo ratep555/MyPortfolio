@@ -19,9 +19,9 @@ export class ChartsComponent implements OnInit {
   title = '';
   type = ChartType.ColumnChart;
   data = [];
-  columnNames: Column[] = ['Year', 'Profit'];
+  columnNames: Column[] = ['Year', 'Profit/Loss'];
   options = {
-    width: 555,
+    width: 595,
     height: 300,
     backgroundColor: '#ffff00',
     hAxis: { title: '' },

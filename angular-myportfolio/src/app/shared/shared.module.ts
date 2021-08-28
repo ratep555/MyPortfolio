@@ -8,11 +8,14 @@ import { PagerComponent } from './components/pager/pager.component';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
 import { TextInputComponent } from './components/text-input/text-input.component';
 import { GoogleChartsModule } from 'angular-google-charts';
+import {BsDatepickerModule} from 'ngx-bootstrap/datepicker';
+import { DateInputComponent } from './components/date-input/date-input.component';
 
 @NgModule({
   declarations: [
     PagerComponent,
-    TextInputComponent
+    TextInputComponent,
+    DateInputComponent
   ],
   imports: [
     CommonModule,
@@ -22,8 +25,8 @@ import { GoogleChartsModule } from 'angular-google-charts';
     TypeaheadModule.forRoot(),
     BsDropdownModule.forRoot(),
     CarouselModule.forRoot(),
-    GoogleChartsModule.forRoot({ mapsApiKey: 'AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY' })
-
+    GoogleChartsModule.forRoot({ mapsApiKey: 'AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY' }),
+    BsDatepickerModule.forRoot()
   ],
   exports: [
     PaginationModule,
@@ -33,7 +36,9 @@ import { GoogleChartsModule } from 'angular-google-charts';
     CarouselModule,
     ReactiveFormsModule,
     TextInputComponent,
-    GoogleChartsModule
+    DateInputComponent,
+    GoogleChartsModule,
+    BsDatepickerModule
   ]
 })
 export class SharedModule { }

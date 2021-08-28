@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class CategoriesController : BaseApiController
     {
         private readonly ICategoryService _categoryService;
@@ -24,7 +24,7 @@ namespace API.Controllers
 
         [HttpGet]
         public async Task<ActionResult<Pagination<CategoryDto>>> GetAllCategories(
-        [FromQuery] QueryParameters queryParameters)
+            [FromQuery] QueryParameters queryParameters)
         {
             var categories = await _categoryService.GetCategoriesWithSearching(queryParameters);
             var list = await _categoryService.GetCategoriesWithPaging(queryParameters);

@@ -12,11 +12,9 @@ namespace Core.Interfaces
         Task UpdateResolved(int stockId, string email);
         Task<IEnumerable<ClientPortfolioDto>> ShowClientPortfolio(QueryParameters queryParameters, string email);
         Task<ClientPortfolioWithProfitOrLossDto> ClientPortfolioWithProfitOrLoss(
-        QueryParameters queryParameters,
-        string email);
+            QueryParameters queryParameters, string email);
         Task<TransactionsForUserWithProfitAndTrafficDto> ShowTransactionsWithProfitAndTraffic(
-        QueryParameters queryParameters,
-        string email);
+            QueryParameters queryParameters, string email);
         Task<int> TotalQuantity(string email, int stockId);
         
     }

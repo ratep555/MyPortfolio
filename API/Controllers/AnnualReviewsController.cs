@@ -47,10 +47,12 @@ namespace API.Controllers
 
         [HttpGet("list")]
         public async Task<ActionResult<Pagination<AnnualProfitOrLossDto>>> GetAllAnnualProfitAndLoss(
-        [FromQuery] QueryParameters queryParameters)
+            [FromQuery] QueryParameters queryParameters)
         {
-            var annuals = await _annualReviewService.GetAnnualProfitOrLossWithSearching(queryParameters);
-            var list = await _annualReviewService.GetAnnualProfitOrLossWithPaging(queryParameters);
+            var email = User.RetrieveEmailFromPrincipal();
+
+            var annuals = await _annualReviewService.GetAnnualProfitOrLossWithSearching(queryParameters, email);
+            var list = await _annualReviewService.GetAnnualProfitOrLossWithPaging(queryParameters, email);
 
             var data = _mapper.Map<IEnumerable<AnnualProfitOrLossDto>>(list);
 

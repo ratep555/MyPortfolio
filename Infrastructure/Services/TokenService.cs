@@ -22,12 +22,33 @@ namespace Infrastructure.Services
 
         public string CreateToken(AppUser user)
         {
-           
-            var claims = new List<Claim>
+            /*  var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.GivenName, user.DisplayName)
             };
+ */
+
+            var claims = new List<Claim>();
+
+            if (user.Email == "bob@test.com")
+            {
+                claims = new List<Claim>
+                {
+                    new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                    new Claim(JwtRegisteredClaimNames.GivenName, user.DisplayName),
+                    new Claim(ClaimTypes.Role,"Admin")
+                };
+            }
+            
+            else
+            {
+                claims = new List<Claim>
+                {
+                    new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                    new Claim(JwtRegisteredClaimNames.GivenName, user.DisplayName),
+                };
+            }           
 
             var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
 

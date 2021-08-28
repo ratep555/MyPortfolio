@@ -23,7 +23,7 @@ namespace Infrastructure.Services
         {
             var transaction = new StockTransaction
             {
-                Date = DateTime.Now,
+                Date = transactionDto.DateOfTransaction,
                 StockId = id,
                 Purchase = true,
                 Quantity = transactionDto.Quantity,
@@ -42,7 +42,7 @@ namespace Infrastructure.Services
         {
             var transaction = new StockTransaction
             {
-                Date = DateTime.Now,
+                Date = transactionDto.DateOfTransaction,
                 StockId = id,
                 Purchase = false,
                 Quantity = transactionDto.Quantity,
@@ -161,8 +161,7 @@ namespace Infrastructure.Services
         }
 
         public async Task<IEnumerable<ClientPortfolioDto>> ShowClientPortfolio(
-        QueryParameters queryParameters,
-        string email)
+            QueryParameters queryParameters, string email)
         {
             decimal basket4 = 0;
             decimal basket6 = 0;
@@ -197,8 +196,7 @@ namespace Infrastructure.Services
         }
 
         public async Task<ClientPortfolioWithProfitOrLossDto> ClientPortfolioWithProfitOrLoss(
-        QueryParameters queryParameters,
-        string email)
+            QueryParameters queryParameters, string email)
         {
             var list = await ShowClientPortfolio(queryParameters, email);
 
@@ -220,8 +218,7 @@ namespace Infrastructure.Services
         }
 
         public async Task<TransactionsForUserWithProfitAndTrafficDto> ShowTransactionsWithProfitAndTraffic(
-        QueryParameters queryParameters,
-        string email)
+            QueryParameters queryParameters, string email)
         {
             TransactionsForUserWithProfitAndTrafficDto list = new TransactionsForUserWithProfitAndTrafficDto();
 

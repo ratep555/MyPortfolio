@@ -8,8 +8,10 @@ namespace Core.Interfaces
 {
     public interface IAnnualReviewService
     {
-        Task<IQueryable<AnnualProfitOrLoss>> GetAnnualProfitOrLossWithSearching(QueryParameters queryParameters);     
-        Task<IQueryable<AnnualProfitOrLoss>> GetAnnualProfitOrLossWithPaging(QueryParameters queryParameters);      
+        Task<IQueryable<AnnualProfitOrLoss>> GetAnnualProfitOrLossWithSearching(
+            QueryParameters queryParameters, string email);     
+        Task<IQueryable<AnnualProfitOrLoss>> GetAnnualProfitOrLossWithPaging(
+            QueryParameters queryParameters, string email);      
         Task ActionsRegardingProfitOrLossCardUponLogin(string email);
         Task ActionsRegardingProfitOrLossCardUponPurchase(string email);
         Task ActionsRegardingProfitOrLossCardUponSelling(string email);

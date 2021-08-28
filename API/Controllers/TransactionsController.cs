@@ -70,7 +70,7 @@ namespace API.Controllers
 
         [HttpGet("portfolio")]
         public async Task<ActionResult<ClientPortfolioWithProfitOrLossDto>> GetfitAndTraffic(
-        [FromQuery]QueryParameters queryParameters)
+            [FromQuery]QueryParameters queryParameters)
         {
          var email = HttpContext.User.RetrieveEmailFromPrincipal();
 
@@ -81,7 +81,7 @@ namespace API.Controllers
 
         [HttpGet("listoftransactions")]
         public async Task<ActionResult<TransactionsForUserWithProfitAndTrafficDto>> GetTransactionsWithProfitAndTraffic(
-        [FromQuery]QueryParameters queryParameters)
+            [FromQuery]QueryParameters queryParameters)
         {
          var email = HttpContext.User.RetrieveEmailFromPrincipal();
 

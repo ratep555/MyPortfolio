@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { MyParams } from '../shared/models/myparams';
 import { IUser1 } from '../shared/models/user';
 import { UserService } from './user.service';
+import Swal from 'sweetalert2/dist/sweetalert2.js';
 
 @Component({
   selector: 'app-user',
@@ -56,21 +57,39 @@ export class UserComponent implements OnInit {
 }
 
 unlockUser(userId: string) {
-  if (confirm('Are you sure you want to unlock this user?')) {
+  Swal.fire({
+    title: 'Are you sure want to unlock this user?',
+    text: 'You can always lock it afterwards!',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, unlock it!',
+    confirmButtonColor: '#DD6B55',
+    cancelButtonText: 'No, forget about it'
+  }).then((result) => {
+    if (result.value) {
     this.userService.unlockUser(userId)
       .subscribe(
         res => {
           this.getUsers();
-          this.toastr.success('User Unlocked!!');
+          this.toastr.error('User Locked!!');
         },
         err => { console.log(err);
-         }
-      );
-  }
-}
+        });
+      }
+    });
+    }
 
 lockUser(userId: string) {
-  if (confirm('Are you sure you want to lock this user?')) {
+  Swal.fire({
+    title: 'Are you sure want to lock this user?',
+    text: 'You can always unlock it afterwards!',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, lock it!',
+    confirmButtonColor: '#DD6B55',
+    cancelButtonText: 'No, forget about it'
+  }).then((result) => {
+    if (result.value) {
     this.userService.lockUser(userId)
       .subscribe(
         res => {
@@ -78,8 +97,9 @@ lockUser(userId: string) {
           this.toastr.error('User Locked!!');
         },
         err => { console.log(err);
-         }
-      );
-  }
-}
+        });
+      }
+    });
+    }
+
 }

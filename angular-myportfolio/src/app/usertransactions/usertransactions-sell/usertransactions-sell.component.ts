@@ -30,7 +30,8 @@ export class UsertransactionsSellComponent implements OnInit {
 createStockForm() {
     this.stockForm = new FormGroup({
     price: new FormControl('', [Validators.required]),
-    quantity: new FormControl('', Validators.required)
+    quantity: new FormControl('', Validators.required),
+    dateOfTransaction: new FormControl('', Validators.required)
   });
 }
 
