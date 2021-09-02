@@ -1,10 +1,13 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { IStock } from '../shared/models/stock';
 import { MyParams } from '../shared/models/myparams';
 import { StockService } from './stock.service';
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
+import { AccountService } from '../account/account.service';
+import { IUser } from '../shared/models/user';
 
 @Component({
   selector: 'app-stock',

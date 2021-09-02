@@ -2,9 +2,12 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { AuthGuard } from './core/guards/auth.guard';
+import { NotFoundComponent } from './core/not-found/not-found.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
+
+  {path: 'not-found', component: NotFoundComponent},
 
   {path: 'stocks', canActivate: [AuthGuard],
   loadChildren: () => import('./stock/stock.module').then(mod => mod.StockModule),
@@ -44,7 +47,7 @@ const routes: Routes = [
   loadChildren: () => import('./annualreview/annualreview.module').then(mod => mod.AnnualreviewModule)},
 
   {path: 'account', loadChildren: () => import('./account/account.module').then(mod => mod.AccountModule)},
-  {path: '**', redirectTo: '', pathMatch: 'full'}
+  {path: '**', component: NotFoundComponent, pathMatch: 'full'}
 ];
 
 @NgModule({

@@ -9,13 +9,18 @@ import { ToastrService } from 'ngx-toastr';
 export class ErrorInterceptor implements HttpInterceptor {
     constructor(private router: Router , private toastr: ToastrService) {}
 
-    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {        return next.handle(req).pipe(
+    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+        return next.handle(req).pipe(
             catchError(error => {
                 if (error) {
                     if (error.status === 400) {
                         if (error.error.errors) {
                             throw error.error;
-                        }
+                        }  else if (typeof(error.error) === 'object') {
+                            this.toastr.error(error.statusText, error.status);
+                          } else {
+                            this.toastr.error(error.error);
+                          }
                     }
                     if (error.status === 401) {
                         this.toastr.error(error.error.message, error.error.statusCode);
@@ -24,8 +29,8 @@ export class ErrorInterceptor implements HttpInterceptor {
                         this.router.navigateByUrl('/not-found');
                     }
                     if (error.status === 500) {
-                         const navigationExtras: NavigationExtras = {state: {error: error.error}};
-                         this.router.navigateByUrl('/server-error' , navigationExtras );
+                        this.toastr.error(error.error.message, error.error.statusCode);
+
                     }
                 }
                 return throwError(error);

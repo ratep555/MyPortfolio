@@ -3,7 +3,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IStock } from 'src/app/shared/models/stock';
 import { INewTransaction } from 'src/app/shared/models/transaction';
-import { parseWebAPIErrors } from 'src/app/shared/utils';
 import { StockService } from 'src/app/stock/stock.service';
 import { UsertransactionsService } from '../usertransactions.service';
 
@@ -15,7 +14,6 @@ import { UsertransactionsService } from '../usertransactions.service';
 export class UsertransactionsSellComponent implements OnInit {
   stockForm: FormGroup;
   stock: IStock;
-  errors: string[] = [];
 
   constructor(private stockService: StockService,
               private usertransactionsService: UsertransactionsService,
@@ -43,7 +41,6 @@ onSubmit() {
   },
   error => {
     console.log(error);
-    this.errors = parseWebAPIErrors(error);
   });
 }
 

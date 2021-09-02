@@ -5,9 +5,10 @@ import { RouterModule } from '@angular/router';
 import { ToastrModule } from 'ngx-toastr';
 import { SharedModule } from '../shared/shared.module';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 @NgModule({
-  declarations: [NavBarComponent],
+  declarations: [NavBarComponent, NotFoundComponent],
   imports: [
     CommonModule,
     RouterModule,

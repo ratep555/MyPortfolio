@@ -71,7 +71,7 @@ unlockUser(userId: string) {
       .subscribe(
         res => {
           this.getUsers();
-          this.toastr.error('User Locked!!');
+          this.toastr.success('User Unlocked!!');
         },
         err => { console.log(err);
         });

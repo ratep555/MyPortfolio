@@ -18,8 +18,10 @@ namespace API.Extensions
 
             builder = new IdentityBuilder(builder.UserType, builder.Services);            
             builder.AddRoles<IdentityRole>();
-            builder.AddEntityFrameworkStores<PortfolioContext>();
+            builder.AddRoleManager<RoleManager<IdentityRole>>();
             builder.AddSignInManager<SignInManager<AppUser>>();
+            builder.AddRoleValidator<RoleValidator<IdentityRole>>();
+            builder.AddEntityFrameworkStores<PortfolioContext>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options => 

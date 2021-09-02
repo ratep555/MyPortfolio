@@ -23,6 +23,11 @@
      !controlDir.control.valid && controlDir.control.dirty)">
         <span *ngIf="controlDir.control.errors?.emailExists">Email address is in use</span>
     </div>
+
+    <div class="invalid-feedback d-block" *ngIf="(controlDir && controlDir.control &&
+     !controlDir.control.valid && controlDir.control.dirty)">
+        <span *ngIf="controlDir.control.errors?.isEqual">Passwords do not match</span>
+    </div>
   </div>
 
 

@@ -5,12 +5,14 @@ import { UsertransactionsBuyComponent } from './usertransactions-buy/usertransac
 import { UsertransactionsSellComponent } from './usertransactions-sell/usertransactions-sell.component';
 import { SharedModule } from '../shared/shared.module';
 import { UsertransactionsRoutingModule } from './usertransactions-routing.module';
+import { StockDetailComponent } from './stock-detail/stock-detail.component';
 
 @NgModule({
   declarations: [
     UsertransactionsComponent,
     UsertransactionsBuyComponent,
-    UsertransactionsSellComponent
+    UsertransactionsSellComponent,
+    StockDetailComponent
   ],
   imports: [
     CommonModule,
