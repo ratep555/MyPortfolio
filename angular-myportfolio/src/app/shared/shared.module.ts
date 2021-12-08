@@ -25,7 +25,7 @@ import { DateInputComponent } from './components/date-input/date-input.component
     TypeaheadModule.forRoot(),
     BsDropdownModule.forRoot(),
     CarouselModule.forRoot(),
-    GoogleChartsModule.forRoot({ mapsApiKey: 'AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY' }),
+    GoogleChartsModule.forRoot(),
     BsDatepickerModule.forRoot()
   ],
   exports: [

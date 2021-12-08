@@ -16,6 +16,13 @@ namespace Core.Interfaces
         Task<TransactionsForUserWithProfitAndTrafficDto> ShowTransactionsWithProfitAndTraffic(
             QueryParameters queryParameters, string email);
         Task<int> TotalQuantity(string email, int stockId);
-        
+        Task<IEnumerable<ClientPortfolioChartDto>> GetChartForClientPortfolio(string email);
+        Task<int> GetCountForChart(string email);
     }
 }
+
+
+
+
+
+

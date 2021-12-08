@@ -24,7 +24,7 @@ ngOnInit(): void {
 
   this.categoryForm = this.formBuilder.group({
     id: [this.id],
-    categoryName: new FormControl('', [Validators.required])
+    categoryName: ['', [Validators.required]]
     });
 
   this.categoryService.getCategoryById(this.id)

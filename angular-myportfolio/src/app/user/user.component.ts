@@ -58,7 +58,7 @@ export class UserComponent implements OnInit {
 
 unlockUser(userId: string) {
   Swal.fire({
-    title: 'Are you sure want to unlock this user?',
+    title: 'Are you sure you want to unlock this user?',
     text: 'You can always lock it afterwards!',
     icon: 'warning',
     showCancelButton: true,

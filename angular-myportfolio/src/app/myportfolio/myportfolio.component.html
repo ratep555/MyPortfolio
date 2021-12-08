@@ -1,6 +1,11 @@
-<div class="container" style="margin-top: 200px;">   
-   
-        <div class="container mt-3 mb-5">     
+<div class="container" style="margin-top: 150px; margin-bottom: 150px;">   
+    <div class="text-center" *ngIf="count > 0 &&
+    ((currentUser$ | async) && (currentUser$ | async)?.roleName !=='Admin')">
+        <div id='chart_div' style='width: 53%; height: 300px;'>
+            <app-charts></app-charts>
+        </div> 
+    </div>
+        <div class="container mt-3 mb-5">   
             <table class="center table table-bordered table-striped table-condensed table-hover">
                 <thead class="piki">
                     <tr>

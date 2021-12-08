@@ -40,13 +40,14 @@ namespace API.Controllers
         public async Task<ActionResult<Pagination<StockToReturnDto>>> GetAllStocks(
             [FromQuery] QueryParameters queryParameters)
         {
-            var stocks = await _stockService.GetStocksWithSearching(queryParameters);
-            var list = await _stockService.GetStocksWithPaging(queryParameters);
+            var count = await _stockService.GetCountForStocks();
+            
+            var list = await _stockService.GetStocksWithSearchingAndPaging(queryParameters);
 
             var data = _mapper.Map<IEnumerable<StockToReturnDto>>(list);
 
             return Ok(new Pagination<StockToReturnDto>
-            (queryParameters.Page, queryParameters.PageCount, stocks.Count(), data));
+                (queryParameters.Page, queryParameters.PageCount, count, data));
         }
 
         [HttpGet("{id}")]
@@ -59,6 +60,7 @@ namespace API.Controllers
             if (stock == null) return NotFound(new ServerResponse(404));
 
             var stockToReturn = _mapper.Map<StockToReturnDto>(stock);
+            
             stockToReturn.TotalQuantity = await _transactionService.TotalQuantity(email, id);
 
             return Ok(stockToReturn);
@@ -69,7 +71,7 @@ namespace API.Controllers
         {
             var stock = await _stockService.GetStockByIdAsync(id);
 
-            if (stock == null) return NotFound();
+            if (stock == null) return NotFound(new ServerResponse(404));
 
             return _mapper.Map<StockDto>(stock);
         }
@@ -81,15 +83,16 @@ namespace API.Controllers
 
             await _stockService.CreateStock(stock);
 
-            return _mapper.Map<StockDto>(stock);
+            return CreatedAtAction("GetStockById", new {id = stock.Id }, 
+                _mapper.Map<StockDto>(stock));        
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<StockDto>> UpdateStock(int id, [FromBody] StockDto stockDto)
+        public async Task<ActionResult> UpdateStock(int id, [FromBody] StockDto stockDto)
         {
             var stock = _mapper.Map<Stock>(stockDto);
 
-            if (id != stock.Id) return BadRequest();
+            if (id != stock.Id) return BadRequest(new ServerResponse(400));
 
             await _stockService.UpdateStock(stock);
 
@@ -101,7 +104,7 @@ namespace API.Controllers
         {
             var stock = await _stockService.GetStockByIdAsync(id);
 
-            if (stock == null) return NotFound();
+            if (stock == null) return NotFound(new ServerResponse(404));
 
             await _stockService.DeleteStock(stock);
 
@@ -109,35 +112,43 @@ namespace API.Controllers
         }
 
         [HttpGet("categories")]
-        public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
+        public async Task<ActionResult<IEnumerable<CategoryDto>>> GetCategories()
         {
             var list = await _stockService.GetCategories();
 
-            return Ok(list);
+            var categories = _mapper.Map<IEnumerable<CategoryDto>>(list);
+
+            return Ok(categories);        
         }
 
         [HttpGet("modalities")]
-        public async Task<ActionResult<IEnumerable<Modality>>> GetModalities()
+        public async Task<ActionResult<IEnumerable<ModalityDto>>> GetModalities()
         {
             var list = await _stockService.GetModalities();
 
-            return Ok(list);
+            var modalities = _mapper.Map<IEnumerable<ModalityDto>>(list);
+
+            return Ok(modalities);        
         }
 
         [HttpGet("segments")]
-        public async Task<ActionResult<IEnumerable<Segment>>> GetSegments()
+        public async Task<ActionResult<IEnumerable<SegmentDto>>> GetSegments()
         {
             var list = await _stockService.GetSegments();
 
-            return Ok(list);
+            var segments = _mapper.Map<IEnumerable<SegmentDto>>(list);
+
+            return Ok(segments);        
         }
 
         [HttpGet("typesofstock")]
-        public async Task<ActionResult<IEnumerable<Modality>>> GetTypesOfStock()
+        public async Task<ActionResult<IEnumerable<TypeOfStockDto>>> GetTypesOfStock()
         {
             var list = await _stockService.GetTypesOfStock();
 
-            return Ok(list);
+            var typesofstock = _mapper.Map<IEnumerable<TypeOfStockDto>>(list);
+
+            return Ok(typesofstock);
         }
 
         [HttpPut("refresh")]
@@ -146,7 +157,7 @@ namespace API.Controllers
             StockDataModelDto stockData = new StockDataModelDto();
 
             var request = new HttpRequestMessage(HttpMethod.Get,
-           "https://rest.zse.hr/web/Bvt9fe2peQ7pwpyYqODM/price-list/XZAG/2021-07-27/json"); 
+                "https://rest.zse.hr/web/Bvt9fe2peQ7pwpyYqODM/price-list/XZAG/2021-11-05/json"); 
 
             var client = _clientFactory.CreateClient();
 
@@ -161,10 +172,10 @@ namespace API.Controllers
                         await _stockService
                         .RefreshPrices(subitem.symbol, Convert.ToDecimal(subitem.close_price));
                     }             
-            }           
+            }       
+
             return Ok(stockData);
         }  
- 
     }
 }
 

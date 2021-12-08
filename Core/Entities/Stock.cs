@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Core.Entities
@@ -28,6 +29,7 @@ namespace Core.Entities
         public int TypeOfStockId { get; set; }
         public TypeOfStock Type { get; set; }
 
+        public ICollection<StockTransaction> StockTransactions { get; set; }
 
         public int? NumberOfEmployees { get; set; }
         public int? SharesOutstanding { get; set; }

@@ -10,6 +10,8 @@ namespace Core.Entities
             get { return _pageCount; }
             set { _pageCount = (value > MaxPageCount) ? MaxPageCount : value; }
         }
+
+        public int? CategoryId { get; set; }
         private string _query;
         public string Query
         {

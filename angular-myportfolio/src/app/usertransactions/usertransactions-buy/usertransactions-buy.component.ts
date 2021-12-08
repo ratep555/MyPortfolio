@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IStock } from 'src/app/shared/models/stock';
 import { INewTransaction } from 'src/app/shared/models/transaction';
@@ -15,7 +15,8 @@ export class UsertransactionsBuyComponent implements OnInit {
   stockForm: FormGroup;
   stock: IStock;
 
-  constructor(private stockService: StockService,
+  constructor(private formBuilder: FormBuilder,
+              private stockService: StockService,
               private usertransactionsService: UsertransactionsService,
               private activatedRoute: ActivatedRoute,
               private router: Router) { }
@@ -26,10 +27,10 @@ export class UsertransactionsBuyComponent implements OnInit {
   }
 
 createStockForm() {
-    this.stockForm = new FormGroup({
-    price: new FormControl('', [Validators.required]),
-    quantity: new FormControl('', Validators.required),
-    dateOfTransaction: new FormControl('', Validators.required)
+    this.stockForm = this.formBuilder.group({
+    price: ['', [Validators.required]],
+    quantity: ['', Validators.required],
+    dateOfTransaction: ['', Validators.required]
   });
 }
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using API.ErrorHandling;
 using API.Extensions;
 using AutoMapper;
 using Core.Dtos;
@@ -32,7 +33,7 @@ namespace API.Controllers
         }
 
         [HttpPost("buy/{id}")]
-        public async Task<ActionResult> BuyStock(int id, TransactionDto transactionDto)
+        public async Task<ActionResult<TransactionDto>> BuyStock(int id, TransactionDto transactionDto)
         {     
             var email = User.RetrieveEmailFromPrincipal();
 
@@ -46,7 +47,7 @@ namespace API.Controllers
         }
 
         [HttpPost("sell/{id}")]
-        public async Task<ActionResult> SellStock(int id, TransactionDto transactionDto)
+        public async Task<ActionResult<TransactionDto>> SellStock(int id, TransactionDto transactionDto)
         {     
             var email = User.RetrieveEmailFromPrincipal();
 
@@ -69,25 +70,47 @@ namespace API.Controllers
         }
 
         [HttpGet("portfolio")]
-        public async Task<ActionResult<ClientPortfolioWithProfitOrLossDto>> GetfitAndTraffic(
+        public async Task<ActionResult<ClientPortfolioWithProfitOrLossDto>> GetProfitAndTraffic(
             [FromQuery]QueryParameters queryParameters)
         {
-         var email = HttpContext.User.RetrieveEmailFromPrincipal();
+            var email = HttpContext.User.RetrieveEmailFromPrincipal();
 
-         var list = await _transactionService.ClientPortfolioWithProfitOrLoss(queryParameters, email);
+            var list = await _transactionService.ClientPortfolioWithProfitOrLoss(queryParameters, email);
 
-        return Ok(list);
+            return Ok(list);
         }
 
         [HttpGet("listoftransactions")]
         public async Task<ActionResult<TransactionsForUserWithProfitAndTrafficDto>> GetTransactionsWithProfitAndTraffic(
             [FromQuery]QueryParameters queryParameters)
         {
-         var email = HttpContext.User.RetrieveEmailFromPrincipal();
+            var email = HttpContext.User.RetrieveEmailFromPrincipal();
 
-         var list = await _transactionService.ShowTransactionsWithProfitAndTraffic(queryParameters, email);
+            var list = await _transactionService.ShowTransactionsWithProfitAndTraffic(queryParameters, email);
 
-        return Ok(list);
+            return Ok(list);
+        }
+
+        [HttpGet("charts")]
+        public async Task<ActionResult> ShowGraphForClientPortfolio()
+        {
+            var email = HttpContext.User.RetrieveEmailFromPrincipal();
+
+            var list = await _transactionService.GetChartForClientPortfolio(email);
+
+            if (list.Count() > 0) return Ok(new { list });
+
+            return BadRequest(new ServerResponse(400));        
+        }
+
+        [HttpGet("countcharts")]
+        public async Task<ActionResult<int>> ShowCountForClientPortfolio()
+        {
+            var email = HttpContext.User.RetrieveEmailFromPrincipal();
+
+            int count = await _transactionService.GetCountForChart(email);
+
+            return Ok(count);        
         }
     }
 }

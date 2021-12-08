@@ -19,33 +19,32 @@ namespace Infrastructure.Services
             _context = context;
         }
 
-        public async Task<IQueryable<Stock>> GetStocksWithSearching(QueryParameters queryParameters)
+        public async Task<List<Stock>> GetStocksWithSearchingAndPaging(QueryParameters queryParameters)
         {
-            IQueryable<Stock> stock = _context.Stocks
-                                     .Include(x => x.Category)
-                                     .Include(x => x.Modality)
-                                     .Include(x => x.Segment)
-                                     .Include(x => x.Type)
-                                     .AsQueryable()
-                                     .OrderBy(x => x.Symbol);
+            IQueryable<Stock> stocks = _context.Stocks.Include(x => x.Category).Include(x => x.Modality)
+                .Include(x => x.Segment).Include(x => x.Type)
+                .AsQueryable().OrderBy(x => x.Symbol);
             
             if (queryParameters.HasQuery())
             {
-                stock = stock
-                .Where(t => t.Symbol.Contains(queryParameters.Query));
+                stocks = stocks
+                    .Where(x => x.Symbol.Contains(queryParameters.Query));
             }
 
-            return await Task.FromResult(stock);
-        }
+            if (queryParameters.CategoryId.HasValue)
+            {
+                stocks = stocks.Where(x => x.CategoryId == queryParameters.CategoryId);
+            }
 
-        public async Task<IQueryable<Stock>> GetStocksWithPaging(QueryParameters queryParameters)
-        {
-            var stock = await GetStocksWithSearching(queryParameters);
-
-            stock = stock.Skip(queryParameters.PageCount * (queryParameters.Page - 1))
-                           .Take(queryParameters.PageCount);
+            stocks = stocks.Skip(queryParameters.PageCount * (queryParameters.Page - 1))
+                .Take(queryParameters.PageCount);
             
-            return await Task.FromResult(stock);     
+            return await stocks.ToListAsync();
+        }
+        
+        public async Task<int> GetCountForStocks()
+        {
+            return await _context.Stocks.CountAsync();
         }
 
         public async Task<Stock> GetStockByIdAsync(int id)
@@ -78,22 +77,22 @@ namespace Infrastructure.Services
 
         public async Task<List<Category>> GetCategories()
         {
-            return await _context.Categories.ToListAsync();
+            return await _context.Categories.OrderBy(x => x.CategoryName).ToListAsync();
         }
 
         public async Task<List<Modality>> GetModalities()
         {
-            return await _context.Modalities.ToListAsync();
+            return await _context.Modalities.OrderBy(x => x.Label).ToListAsync();
         }
 
         public async Task<List<Segment>> GetSegments()
         {
-            return await _context.Segments.ToListAsync();
+            return await _context.Segments.OrderBy(x => x.Label).ToListAsync();
         }
 
         public async Task<List<TypeOfStock>> GetTypesOfStock()
         {
-            return await _context.TypesOfStock.ToListAsync();
+            return await _context.TypesOfStock.OrderBy(x => x.Label).ToListAsync();
         }
 
         public async Task RefreshPrices(string symbol, decimal price)
@@ -105,15 +104,16 @@ namespace Infrastructure.Services
                        .Include(x => x.Type)
                        .ToListAsync();            
                
-                    foreach (var item in list)
-                    {
-                          item.Symbol = symbol;
-                          item.CurrentPrice = price;
+            foreach (var item in list)
+            {
+                item.Symbol = symbol;
+                item.CurrentPrice = price;
                           
-                          _context.Entry(item).State = EntityState.Modified;
-                          await _context.SaveChangesAsync();      
-                    }                          
+                _context.Entry(item).State = EntityState.Modified;
+                await _context.SaveChangesAsync();      
+            }                          
         }
+    
     }
 }
 

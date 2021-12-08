@@ -17,7 +17,7 @@ namespace Infrastructure.Services
             _context = context;
         }
 
-        public async Task<IQueryable<Surtax>> GetSurtaxesWithSearching(QueryParameters queryParameters)
+        public async Task<List<Surtax>> GetSurtaxesWithSearchingAndPaging(QueryParameters queryParameters)
         {
             IQueryable<Surtax> surtax = _context.Surtaxes.AsQueryable()
                                         .OrderBy(x => x.Residence);
@@ -28,17 +28,15 @@ namespace Infrastructure.Services
                 .Where(t => t.Residence.Contains(queryParameters.Query));            
             }
             
-            return await Task.FromResult(surtax);        
-        }
-
-        public async Task<IQueryable<Surtax>> GetSurtaxesWithPaging(QueryParameters queryParameters)
-        {
-            var surtax = await GetSurtaxesWithSearching(queryParameters);
-
             surtax = surtax.Skip(queryParameters.PageCount * (queryParameters.Page - 1))
                            .Take(queryParameters.PageCount);
             
-            return await Task.FromResult(surtax);     
+            return await surtax.ToListAsync();      
+        }
+
+        public async Task<int> GetCountForSurtaxes()
+        {
+            return await _context.Surtaxes.CountAsync();
         }
 
         public async Task<IEnumerable<Surtax>> ListAllSurtaxes()

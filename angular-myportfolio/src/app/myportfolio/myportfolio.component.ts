@@ -1,6 +1,9 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Observable } from 'rxjs';
+import { AccountService } from '../account/account.service';
 import { MyParams } from '../shared/models/myparams';
 import { IPortfolioAccount, IProfitOrLoss } from '../shared/models/portfolioaccount';
+import { IUser } from '../shared/models/user';
 import { MyportfolioService } from './myportfolio.service';
 
 @Component({
@@ -9,17 +12,22 @@ import { MyportfolioService } from './myportfolio.service';
   styleUrls: ['./myportfolio.component.scss']
 })
 export class MyportfolioComponent implements OnInit {
+  currentUser$: Observable<IUser>;
   @ViewChild('search', {static: false}) searchTerm: ElementRef;
   portfolioAccount: IPortfolioAccount[];
   totalMarketValue: number;
   totalPriceOfPurchase: number;
   totalProfitOrLoss: number;
   myParams = new MyParams();
+  count: number;
 
-  constructor(private myportfolioService: MyportfolioService) { }
+  constructor(private myportfolioService: MyportfolioService,
+              private accountService: AccountService) { }
 
   ngOnInit(): void {
-this.getPortfolioAccount();
+  this.currentUser$ = this.accountService.currentUser$;
+  this.showCountForClientPortfolio();
+  this.getPortfolioAccount();
   }
 
   getPortfolioAccount() {
@@ -28,6 +36,13 @@ this.getPortfolioAccount();
     this.portfolioAccount = response.clientPortfolios;
     this.totalMarketValue = response.totalMarketValue;
     this.totalPriceOfPurchase = response.totalPriceOfPurchase;
+    }, error => console.log(error));
+  }
+
+  showCountForClientPortfolio() {
+    this.myportfolioService.showCountForClientPortfolio()
+    .subscribe(response => {
+    this.count = response;
     }, error => console.log(error));
   }
 

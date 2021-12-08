@@ -24,8 +24,8 @@ ngOnInit(): void {
 
   this.surtaxForm = this.formBuilder.group({
     id: [this.id],
-    residence: new FormControl('', [Validators.required]),
-    amount: new FormControl('', [Validators.required])
+    residence: ['', [Validators.required]],
+    amount: ['', [Validators.required]]
     });
 
   this.surtaxService.getSurtaxById(this.id)

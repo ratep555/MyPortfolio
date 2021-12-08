@@ -17,7 +17,7 @@ namespace Infrastructure.Services
             _context = context;
         }
 
-        public async Task<IQueryable<Modality>> GetModalitiesWithSearching(QueryParameters queryParameters)
+        public async Task<List<Modality>> GetModalitiesWithSearchingAndPaging(QueryParameters queryParameters)
         {
             IQueryable<Modality> modality = _context.Modalities.AsQueryable()
                                         .OrderBy(x => x.Label);
@@ -28,19 +28,17 @@ namespace Infrastructure.Services
                 .Where(t => t.Label.Contains(queryParameters.Query));
             }
 
-            return await Task.FromResult(modality);        
-        }
-
-        public async Task<IQueryable<Modality>> GetModalitiesWithPaging(QueryParameters queryParameters)
-        {
-            var modality = await GetModalitiesWithSearching(queryParameters);
-
             modality = modality.Skip(queryParameters.PageCount * (queryParameters.Page - 1))
                            .Take(queryParameters.PageCount);
             
-            return await Task.FromResult(modality);     
+            return await modality.ToListAsync();   
         }
 
+        public async Task<int> GetCountForModalities()
+        {
+            return await _context.Modalities.CountAsync();
+        }
+     
         public async Task<Modality> GetModalityByIdAsync(int id)
         {
             return await _context.Modalities         

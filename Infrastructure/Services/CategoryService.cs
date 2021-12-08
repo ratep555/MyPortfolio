@@ -17,7 +17,7 @@ namespace Infrastructure.Services
             _context = context;
         }
 
-        public async Task<IQueryable<Category>> GetCategoriesWithSearching(QueryParameters queryParameters)
+        public async Task<List<Category>> GetCategoriesWithSearchingAndPaging(QueryParameters queryParameters)
         {
             IQueryable<Category> category = _context.Categories.AsQueryable()
                                             .OrderBy(x => x.CategoryName);
@@ -28,17 +28,15 @@ namespace Infrastructure.Services
                 .Where(t => t.CategoryName.Contains(queryParameters.Query));
             }
 
-            return await Task.FromResult(category);        
-        }
-
-        public async Task<IQueryable<Category>> GetCategoriesWithPaging(QueryParameters queryParameters)
-        {
-            var category = await GetCategoriesWithSearching(queryParameters);
-
             category = category.Skip(queryParameters.PageCount * (queryParameters.Page - 1))
                            .Take(queryParameters.PageCount);
             
-            return await Task.FromResult(category);     
+            return await category.ToListAsync();        
+        }
+
+        public async Task<int> GetCountForCategories()
+        {
+            return await _context.Categories.CountAsync();
         }
 
         public async Task<Category> GetCategoryByIdAsync(int id)

@@ -4,10 +4,26 @@
             <i class="fa fa-plus mr-1"></i>
             Add Stock</button>
     </div>
+    <div class="form-inline pull-left mt-2">
+        <select
+          class="custom-select mb-1 ml-3"
+          #filter
+          (change)="onCategorySelected($event.target.value)"
+        >
+          <option value="" disabled selected>Filter by categories</option>
+          <option *ngFor="let category of categories" [value]="category.id">
+            {{ category.categoryName }}
+          </option>
+        </select>
+        <button (click)="onReset1()" class="btn btn-primary ml-2 mb-1">
+          <i class="fa fa-refresh mr-1"></i>
+          Reset
+        </button>
+      </div>
     <div class="form-inline pull-right">
         <input (keyup.enter)="onSearch()" type="text" 
         class="form-control mr-2" #search style="width: 300px;"  
-        placeholder="Search">
+        placeholder="Search by symbol">
         <button (click)="onSearch()" class="btn btn-info my-2">
             <i class="fa fa-search mr-1" aria-hidden="true"></i>
             Search</button>
@@ -38,7 +54,7 @@
       <tr *ngFor="let item of stocks" style="color: black;">        
           <td>{{item.symbol}}</td>
           <td>{{item.category}}</td>
-          <td>{{item.currentPrice}} kn</td>
+          <td>{{item.currentPrice | number: '1.2-2'}} kn</td>
           <td>{{item.segment}}</td>
           <td>  
             <div class="text-center">

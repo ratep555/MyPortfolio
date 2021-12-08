@@ -3,9 +3,8 @@
 }
 
 @media (min-width: 576px) {
-img {
-    object-fit: cover;
-    height: 700px;
-    width: 100%;
-}
+    .text-wrapper {
+        float: left;
+        margin: 0 1em 0 0;
+    }
 }

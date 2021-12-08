@@ -26,7 +26,7 @@
                           Current Price
                         </th>
                         <th>
-                      {{stock.currentPrice}}
+                      {{stock.currentPrice | number : '1.2-2'}} kn
                   </th>
                   </tr>
                     <tr>
@@ -58,7 +58,7 @@
                           Market Cap
                         </th>
                         <th>
-                      {{stock.sharesOutstanding * stock.currentPrice}}
+                      {{stock.sharesOutstanding * stock.currentPrice}} kn
                   </th>
                   </tr>
                     <tr>
@@ -66,7 +66,7 @@
                           Dividend
                         </th>
                         <th>
-                      {{stock.dividend}}
+                      {{stock.dividend | number : '1.2-2'}} kn
                   </th>
                   </tr>
                     <tr>
@@ -87,7 +87,7 @@
                           Revenue
                         </th>
                         <th>
-                           {{stock.revenue}}
+                           {{stock.revenue}} kn
                         </th>
                     </tr>
                     <tr>
@@ -95,7 +95,7 @@
                           Expenditure
                         </th>
                         <th>
-                      {{stock.expenditure}}
+                      {{stock.expenditure}} kn
                   </th>
                   </tr>
                     <tr>
@@ -103,7 +103,7 @@
                           Gross Profit
                         </th>
                         <th>
-                      {{(stock.revenue) - (stock.expenditure)}}
+                      {{(stock.revenue) - (stock.expenditure)}} kn
                   </th>
                   </tr>
                     <tr>
@@ -111,7 +111,7 @@
                           Enterprise Value
                         </th>
                         <th>
-                      {{stock.enterpriseValue}}
+                      {{stock.enterpriseValue}} kn
                   </th>
                   </tr>
                     <tr>
@@ -119,7 +119,7 @@
                           Book Value per Share (BVPS)
                         </th>
                         <th>
-                      {{((stock?.enterpriseValue) / (stock?.sharesOutstanding)) | number : '1.2-2'}}
+                      {{((stock?.enterpriseValue) / (stock?.sharesOutstanding)) | number : '1.2-2'}} kn
                   </th>
                   </tr>
                     <tr>
@@ -127,7 +127,7 @@
                           Price/Book (P/B)
                         </th>
                         <th>
-                      {{((stock?.currentPrice) / ((stock.enterpriseValue) / (stock.sharesOutstanding))) | number : '1.2-2'}}
+                      {{((stock?.currentPrice) / ((stock.enterpriseValue) / (stock.sharesOutstanding))) | number : '1.2-2'}} 
                   </th>
                   </tr>
                     <tr>
@@ -135,7 +135,7 @@
                           Earnings per Share
                         </th>
                         <th>
-                            {{(((stock.revenue) - (stock.expenditure)) / (stock.sharesOutstanding)) | number : '1.2-2'}}
+                            {{(((stock.revenue) - (stock.expenditure)) / (stock.sharesOutstanding)) | number : '1.2-2'}} kn
                         </th>
                   </tr>
                     <tr>

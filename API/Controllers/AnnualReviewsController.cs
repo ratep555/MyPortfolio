@@ -51,13 +51,14 @@ namespace API.Controllers
         {
             var email = User.RetrieveEmailFromPrincipal();
 
-            var annuals = await _annualReviewService.GetAnnualProfitOrLossWithSearching(queryParameters, email);
-            var list = await _annualReviewService.GetAnnualProfitOrLossWithPaging(queryParameters, email);
+            var annuals = _annualReviewService.GetAnnualProfitOrLossWithSearching(queryParameters, email);
+
+            var list = await _annualReviewService.ReturnList(queryParameters, email);
 
             var data = _mapper.Map<IEnumerable<AnnualProfitOrLossDto>>(list);
 
             return Ok(new Pagination<AnnualProfitOrLossDto>
-            (queryParameters.Page, queryParameters.PageCount, annuals.Count(), data));
+                (queryParameters.Page, queryParameters.PageCount, annuals.Count(), data));
         }
         
         [HttpPut("{id}")]

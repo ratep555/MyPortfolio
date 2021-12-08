@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.ErrorHandling;
 using AutoMapper;
 using Core.Dtos;
 using Core.Entities;
@@ -26,13 +27,14 @@ namespace API.Controllers
         public async Task<ActionResult<Pagination<ModalityDto>>> GetAllModalities(
             [FromQuery] QueryParameters queryParameters)
         {
-            var modalities = await _modalityService.GetModalitiesWithSearching(queryParameters);
-            var list = await _modalityService.GetModalitiesWithPaging(queryParameters);
+            var count = await _modalityService.GetCountForModalities();
+            
+            var list = await _modalityService.GetModalitiesWithSearchingAndPaging(queryParameters);
 
             var data = _mapper.Map<IEnumerable<ModalityDto>>(list);
 
             return Ok(new Pagination<ModalityDto>
-            (queryParameters.Page, queryParameters.PageCount, modalities.Count(), data));
+                (queryParameters.Page, queryParameters.PageCount, count, data));
         }
 
         [HttpGet("{id}")]
@@ -40,7 +42,7 @@ namespace API.Controllers
         {
             var modality = await _modalityService.GetModalityByIdAsync(id);
 
-            if (modality == null) return NotFound();
+            if (modality == null) return NotFound(new ServerResponse(404));
 
             return _mapper.Map<ModalityDto>(modality);
         }
@@ -52,15 +54,16 @@ namespace API.Controllers
 
             await _modalityService.CreateModality(modality);
 
-            return _mapper.Map<ModalityDto>(modality);
+            return CreatedAtAction("GetModalityById", new {id = modality.Id }, 
+                _mapper.Map<ModalityDto>(modality));             
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<ModalityDto>> UpdateModality(int id, [FromBody] ModalityDto modalityDto)
+        public async Task<ActionResult> UpdateModality(int id, [FromBody] ModalityDto modalityDto)
         {
             var modality = _mapper.Map<Modality>(modalityDto);
 
-            if (id != modality.Id) return BadRequest();
+            if (id != modality.Id) return BadRequest(new ServerResponse(400));
 
             await _modalityService.UpdateModality(modality);
 
@@ -72,13 +75,12 @@ namespace API.Controllers
         {
             var modality = await _modalityService.GetModalityByIdAsync(id);
 
-            if (modality == null) return NotFound();
+            if (modality == null) return NotFound(new ServerResponse(404));
 
             await _modalityService.DeleteModality(modality);
 
             return NoContent();
         }
-
     }
 }
 

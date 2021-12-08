@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Core.Dtos;
@@ -30,7 +31,7 @@ namespace Infrastructure.Services
             return roleName;
         }
 
-        public async Task<IQueryable<UserToReturnDto>> GetUsersWithSearching(
+        public async Task<List<UserToReturnDto>> GetUsersWithSearchingAndPaging(
             QueryParameters queryParameters, string email)
         {
             IQueryable<UserToReturnDto> user = (from u in _context.Users.Where(u => u.Email != email)
@@ -49,20 +50,17 @@ namespace Infrastructure.Services
                 .Where(t => t.Email.Contains(queryParameters.Query));
             }
 
-            return await Task.FromResult(user);     
-        }
-
-        public async Task<IQueryable<UserToReturnDto>> GetUsersWithPaging(
-            QueryParameters queryParameters, string email)
-        {
-            var user = await GetUsersWithSearching(queryParameters, email);
-
             user = user.Skip(queryParameters.PageCount * (queryParameters.Page - 1))
                            .Take(queryParameters.PageCount);
             
-            return await Task.FromResult(user);     
+            return await user.ToListAsync();       
         }
 
+        public async Task<int> GetCountForUsers()
+        {
+            return await _context.AppUsers.CountAsync();
+        }
+       
         public async Task<AppUser> FindUserByIdAsync(string userId)
         {
             return await _context.AppUsers.Where(a => a.Id == userId).FirstOrDefaultAsync();

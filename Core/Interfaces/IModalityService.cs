@@ -7,8 +7,8 @@ namespace Core.Interfaces
 {
     public interface IModalityService
     {
-        Task<IQueryable<Modality>> GetModalitiesWithSearching(QueryParameters queryParameters);
-        Task<IQueryable<Modality>> GetModalitiesWithPaging(QueryParameters queryParameters);
+        Task<List<Modality>> GetModalitiesWithSearchingAndPaging(QueryParameters queryParameters);
+        Task<int> GetCountForModalities();
         Task<Modality> GetModalityByIdAsync(int id);
         Task CreateModality(Modality modality);
         Task UpdateModality(Modality modality);

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { AnnualreviewService } from '../annualreview.service';
 import {
   ChartErrorEvent,
   ChartMouseLeaveEvent,
@@ -9,6 +8,7 @@ import {
   Column,
   GoogleChartComponent
 } from 'angular-google-charts';
+import { MyportfolioService } from '../myportfolio.service';
 
 @Component({
   selector: 'app-charts',
@@ -17,30 +17,35 @@ import {
 })
 export class ChartsComponent implements OnInit {
   title = '';
-  type = ChartType.ColumnChart;
+  type = ChartType.PieChart;
   data = [];
-  columnNames: Column[] = ['Year', 'Profit/Loss'];
+  columnNames: Column[] = ['Hospital', 'Private'];
   options = {
     width: 595,
     height: 300,
-    backgroundColor: '#ffff00',
+    backgroundColor: '#809fff',
     hAxis: { title: '' },
   };
   width = 777;
   height = 300;
 
-  constructor(private annualReviewService: AnnualreviewService) { }
+  constructor(private myportfolioService: MyportfolioService) { }
 
-  ngOnInit() {
-    this.annualReviewService.getChartWithProfitAndLoss().subscribe(
+  ngOnInit(): void {
+    this.showNumberOfPatients();
+  }
+
+  showNumberOfPatients() {
+    this.myportfolioService.showGraphForClientPortfolio().subscribe(
       result => {
         this.data = [];
-        this.title = 'Graphical Anual Review of Profit and Loss';
-        this.type = ChartType.ColumnChart;
+        this.title = 'Client portfolio';
+        this.type = ChartType.PieChart;
         console.log(result.list);
         for (const data in result.list) {
           if (data) {
-            this.data.push([result.list[data].year.toString(), result.list[data].amount]);
+            this.data.push([result.list[data].symbol.toString(),
+              result.list[data].countForSymbol]);
           }
         }
       },
@@ -48,6 +53,6 @@ export class ChartsComponent implements OnInit {
         console.log(error);
       }
     );
-
   }
+
 }

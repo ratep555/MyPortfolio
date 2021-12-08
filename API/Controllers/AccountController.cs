@@ -84,8 +84,7 @@ namespace API.Controllers
         {
             if (CheckEmailExistsAsync(registerDto.Email).Result.Value)
             {
-                return new BadRequestObjectResult
-                ("Email address is in use");
+                return new BadRequestObjectResult ("Email address is in use");
             }
  
             var user = new AppUser
@@ -114,11 +113,11 @@ namespace API.Controllers
         {
             var email = User.RetrieveEmailFromPrincipal();
 
-            var users = await _userService.GetUsersWithSearching(queryParameters, email);
-            var list = await _userService.GetUsersWithPaging(queryParameters, email);
+            var count = await _userService.GetCountForUsers();
+            var list = await _userService.GetUsersWithSearchingAndPaging(queryParameters, email);
 
             return Ok(new Pagination<UserToReturnDto>
-            (queryParameters.Page, queryParameters.PageCount, users.Count(), list));
+                (queryParameters.Page, queryParameters.PageCount, count, list));
         }
 
         [Authorize(Roles = "Admin")]

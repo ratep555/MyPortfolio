@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { ICategory } from '../shared/models/category';
 import { MyParams } from '../shared/models/myparams';
 import { IStock } from '../shared/models/stock';
 import { StockService } from '../stock/stock.service';
@@ -13,9 +14,11 @@ import { StockService } from '../stock/stock.service';
 
 export class UsertransactionsComponent implements OnInit {
   @ViewChild('search', {static: false}) searchTerm: ElementRef;
+  @ViewChild('filter', {static: false}) filterTerm: ElementRef;
   stocks: IStock[];
   myParams = new MyParams();
   totalCount: number;
+  categories: ICategory[];
 
   constructor(private stockService: StockService,
               private router: Router,
@@ -23,6 +26,7 @@ export class UsertransactionsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getStocks();
+    this.getCategories();
     this.onRefresh();
   }
 
@@ -39,6 +43,19 @@ export class UsertransactionsComponent implements OnInit {
     );
   }
 
+  getCategories() {
+    this.stockService.getCategories().subscribe(response => {
+    this.categories = response;
+    }, error => {
+    console.log(error);
+    });
+    }
+
+  onCategorySelected(categoryIdId: number) {
+    this.myParams.categoryId = categoryIdId;
+    this.getStocks();
+    }
+
   onSearch() {
     this.myParams.query = this.searchTerm.nativeElement.value;
     this.getStocks();
@@ -46,6 +63,12 @@ export class UsertransactionsComponent implements OnInit {
 
   onReset() {
     this.searchTerm.nativeElement.value = '';
+    this.myParams = new MyParams();
+    this.getStocks();
+  }
+
+  onReset1() {
+    this.filterTerm.nativeElement.value = '';
     this.myParams = new MyParams();
     this.getStocks();
   }

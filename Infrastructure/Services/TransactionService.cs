@@ -23,7 +23,7 @@ namespace Infrastructure.Services
         {
             var transaction = new StockTransaction
             {
-                Date = transactionDto.DateOfTransaction,
+                Date = transactionDto.DateOfTransaction.ToLocalTime(),
                 StockId = id,
                 Purchase = true,
                 Quantity = transactionDto.Quantity,
@@ -42,7 +42,7 @@ namespace Infrastructure.Services
         {
             var transaction = new StockTransaction
             {
-                Date = transactionDto.DateOfTransaction,
+                Date = transactionDto.DateOfTransaction.ToLocalTime(),
                 StockId = id,
                 Purchase = false,
                 Quantity = transactionDto.Quantity,
@@ -145,19 +145,18 @@ namespace Infrastructure.Services
                 if (item.TotalQuantity > 0)
                 {
                     var reverselist = _context.StockTransactions
-                                      .Where(x => x.StockId == item.StockId && x.Email == email & x.Purchase == true)
-                                      .OrderByDescending(x => x.Id);
+                        .Where(x => x.StockId == item.StockId && x.Email == email & x.Purchase == true)
+                        .OrderByDescending(x => x.Id);
 
                     var left = SumOfLastTransactions(reverselist, num);
                     item.AveragePriceOfPurchase = left / num;
-                    item.TotalPriceOfPurchasePerStock
-                     = item.AveragePriceOfPurchase * item.TotalQuantity;
+                    item.TotalPriceOfPurchasePerStock = item.AveragePriceOfPurchase * item.TotalQuantity;
                     item.TotalMarketValuePerStock = item.CurrentPrice * item.TotalQuantity;
                 }
             }
 
-            return await Task.FromResult(clientPortfolio.Where(d => d.TotalQuantity > 0).OrderBy(d => d.Symbol)
-            .GroupBy(d => d.Symbol).Select(d => d.FirstOrDefault()));
+            return clientPortfolio.Where(d => d.TotalQuantity > 0).OrderBy(d => d.Symbol)
+                .GroupBy(d => d.Symbol).Select(d => d.FirstOrDefault());
         }
 
         public async Task<IEnumerable<ClientPortfolioDto>> ShowClientPortfolio(
@@ -172,8 +171,7 @@ namespace Infrastructure.Services
             foreach (var item in list)
             {
                 basket4 = item.AveragePriceOfPurchase * item.TotalQuantity;
-                basket6 = list.Where(x => x.TotalQuantity > 0)
-                .Sum(x => x.TotalQuantity * x.AveragePriceOfPurchase);
+                basket6 = list.Where(x => x.TotalQuantity > 0).Sum(x => x.TotalQuantity * x.AveragePriceOfPurchase);
 
                 if (basket7.HasValue)
                 {
@@ -192,7 +190,7 @@ namespace Infrastructure.Services
                 .Where(t => t.Symbol.ToLowerInvariant().Contains(queryParameters.Query.ToLowerInvariant()));
             }
 
-            return await Task.FromResult(list);
+            return list;
         }
 
         public async Task<ClientPortfolioWithProfitOrLossDto> ClientPortfolioWithProfitOrLoss(
@@ -248,7 +246,7 @@ namespace Infrastructure.Services
                 .Where(t => t.Stock.Contains(queryParameters.Query));
             }
 
-            list.ListOfTransactions = transactions;
+            list.ListOfTransactions = await transactions.ToListAsync();
 
             decimal? basket1 = 0;
             decimal? basket2 = 0;
@@ -278,7 +276,7 @@ namespace Infrastructure.Services
             list.TotalNetProfit = basket2 - basket3;
             list.TotalTraffic = basket1;
 
-            return await Task.FromResult(list);
+            return list;
         }
 
         private decimal SumOfLastTransactions(IEnumerable<StockTransaction> stockTransactions, int max)
@@ -299,6 +297,44 @@ namespace Infrastructure.Services
                 }
             }
             return result;
+        }
+
+        public async Task<IEnumerable<ClientPortfolioChartDto>> GetChartForClientPortfolio(string email)
+        {
+            List<ClientPortfolioChartDto> chartlist = new List<ClientPortfolioChartDto>();
+
+            var list = await ShowClientPortfolioDto(email);
+
+            decimal basket4 = 0;
+            decimal basket6 = 0;
+            decimal? basket7 = 0;
+
+            foreach (var item in list)
+            {
+                basket4 = item.AveragePriceOfPurchase * item.TotalQuantity;
+                basket6 = list.Where(x => x.TotalQuantity > 0).Sum(x => x.TotalQuantity * x.AveragePriceOfPurchase);
+
+                if (basket7.HasValue)
+                {
+                    basket7 = (basket4 / basket6) * 100;
+                    item.PortfolioPercentage = basket7;
+                }
+                else
+                {
+                    item.PortfolioPercentage = 0;
+                }
+
+                chartlist.Add(new ClientPortfolioChartDto { Symbol = item.Symbol, 
+                        CountForSymbol = (int)item.PortfolioPercentage  });
+            }
+
+            return chartlist;
+        }
+        public async Task<int> GetCountForChart(string email)
+        {
+            var list = await GetChartForClientPortfolio(email);
+
+            return list.Count();
         }
     }
 }

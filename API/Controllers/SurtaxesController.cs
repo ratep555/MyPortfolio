@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.ErrorHandling;
 using AutoMapper;
 using Core.Dtos;
 using Core.Entities;
@@ -26,22 +27,25 @@ namespace API.Controllers
         public async Task<ActionResult<Pagination<SurtaxDto>>> GetAllSurtaxes(
             [FromQuery] QueryParameters queryParameters)
         {
-            var surtaxes = await _surtaxService.GetSurtaxesWithSearching(queryParameters);
-            var list = await _surtaxService.GetSurtaxesWithPaging(queryParameters);
+            var count = await _surtaxService.GetCountForSurtaxes();
+
+            var list = await _surtaxService.GetSurtaxesWithSearchingAndPaging(queryParameters);
 
             var data = _mapper.Map<IEnumerable<SurtaxDto>>(list);
 
             return Ok(new Pagination<SurtaxDto>
-            (queryParameters.Page, queryParameters.PageCount, surtaxes.Count(), data));
+            (queryParameters.Page, queryParameters.PageCount, count, data));
         }
         
         [AllowAnonymous]
         [HttpGet("getsurtaxes")]
-        public async Task<ActionResult<IEnumerable<Surtax>>> GetSurtaxesForTypeahead()
+        public async Task<ActionResult<IEnumerable<SurtaxDto>>> GetSurtaxesForTypeahead()
         {
             var list = await _surtaxService.ListAllSurtaxes();
 
-            return Ok(list);
+            var surtaxes = _mapper.Map<IEnumerable<SurtaxDto>>(list);
+
+            return Ok(surtaxes);
         }
 
         [HttpGet("{id}")]       
@@ -49,7 +53,7 @@ namespace API.Controllers
         {
             var surtax = await _surtaxService.GetSurtaxByIdAsync(id);
 
-            if (surtax == null) return NotFound();
+            if (surtax == null) return NotFound(new ServerResponse(404));
 
             return _mapper.Map<SurtaxDto>(surtax);
         }
@@ -61,15 +65,16 @@ namespace API.Controllers
 
             await _surtaxService.CreateSurtax(surtax);
 
-            return _mapper.Map<SurtaxDto>(surtax);
+            return CreatedAtAction("GetSurtaxById", new {id = surtax.Id }, 
+                _mapper.Map<SurtaxDto>(surtax));    
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<SurtaxDto>> UpdateSurtax(int id, [FromBody] SurtaxDto surtaxDto)
+        public async Task<ActionResult> UpdateSurtax(int id, [FromBody] SurtaxDto surtaxDto)
         {
             var surtax = _mapper.Map<Surtax>(surtaxDto);
 
-            if (id != surtax.Id) return BadRequest();
+            if (id != surtax.Id) return BadRequest(new ServerResponse(400));
 
             await _surtaxService.UpdateSurtax(surtax);
 
@@ -81,7 +86,7 @@ namespace API.Controllers
         {
             var surtax = await _surtaxService.GetSurtaxByIdAsync(id);
 
-            if (surtax == null) return NotFound();
+            if (surtax == null) return NotFound(new ServerResponse(404));
 
             await _surtaxService.DeleteSurtax(surtax);
 

@@ -22,7 +22,7 @@ namespace API.Extensions
             services.AddScoped<ITransactionService, TransactionService>();
             services.AddScoped<IAnnualReviewService, AnnualReviewService>();
 
-             services.Configure<ApiBehaviorOptions>(options =>
+            services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.InvalidModelStateResponseFactory = actionContext => 
                 {

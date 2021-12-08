@@ -26,4 +26,29 @@ export class MyportfolioService {
         );
       }
 
+  showGraphForClientPortfolio() {
+    return this.http.get<any>(this.baseUrl + 'transactions/charts').pipe(
+    map( result => {
+      console.log(result);
+      return result;
+    })
+    );
+  }
+
+  showCountForClientPortfolio() {
+    return this.http.get<number>(this.baseUrl + 'transactions/countcharts').pipe(
+    map( result => {
+      return result;
+    })
+    );
+  }
+
     }
+
+
+
+
+
+
+
+

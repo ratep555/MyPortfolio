@@ -7,8 +7,8 @@ namespace Core.Interfaces
 {
     public interface ITypeOfStockService
     {
-        Task<IQueryable<TypeOfStock>> GetTypesOfStockWithSearching(QueryParameters queryParameters);
-        Task<IQueryable<TypeOfStock>> GetTypesOfStockWithPaging(QueryParameters queryParameters);
+        Task<List<TypeOfStock>> GetTypesOfStockWithSearchingAndPaging(QueryParameters queryParameters);
+        Task<int> GetCountForTypesOfStock();
         Task<TypeOfStock> GetTypeOfStockByIdAsync(int id);
         Task CreateTypeOfStock(TypeOfStock typeOfStock);
         Task UpdateTypeOfStock(TypeOfStock typeOfStock);       

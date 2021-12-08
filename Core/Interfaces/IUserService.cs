@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Core.Dtos;
@@ -8,8 +9,8 @@ namespace Core.Interfaces
     public interface IUserService
     {
         Task<string> GetRoleName(string userId);
-        Task<IQueryable<UserToReturnDto>> GetUsersWithSearching(QueryParameters queryParameters, string email);
-        Task<IQueryable<UserToReturnDto>> GetUsersWithPaging(QueryParameters queryParameters, string email);
+        Task<List<UserToReturnDto>> GetUsersWithSearchingAndPaging(QueryParameters queryParameters, string email);
+        Task<int> GetCountForUsers();
         Task<AppUser> FindUserByIdAsync(string userId);
         Task LockUser(string id);
         Task UnlockUser(string id);

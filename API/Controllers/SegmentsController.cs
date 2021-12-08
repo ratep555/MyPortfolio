@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.ErrorHandling;
 using AutoMapper;
 using Core.Dtos;
 using Core.Entities;
@@ -20,20 +21,20 @@ namespace API.Controllers
         {
             _mapper = mapper;
             _segmentService = segmentService;
-
         }
 
         [HttpGet]
         public async Task<ActionResult<Pagination<SegmentDto>>> GetAllSegments(
             [FromQuery] QueryParameters queryParameters)
         {
-            var segments = await _segmentService.GetSegmentsWithSearching(queryParameters);
-            var list = await _segmentService.GetSegmentsWithPaging(queryParameters);
+            var count = await _segmentService.GetCountForSegments();
+
+            var list = await _segmentService.GetSegmentsWithSearchingAndPaging(queryParameters);
 
             var data = _mapper.Map<IEnumerable<SegmentDto>>(list);
 
             return Ok(new Pagination<SegmentDto>
-            (queryParameters.Page, queryParameters.PageCount, segments.Count(), data));
+                (queryParameters.Page, queryParameters.PageCount, count, data));
         }
 
         [HttpGet("{id}")]
@@ -41,7 +42,7 @@ namespace API.Controllers
         {
             var segment = await _segmentService.GetSegmentByIdAsync(id);
 
-            if (segment == null) return NotFound();
+            if (segment == null) return NotFound(new ServerResponse(404));
 
             return _mapper.Map<SegmentDto>(segment);
         }
@@ -53,15 +54,16 @@ namespace API.Controllers
 
             await _segmentService.CreateSegment(segment);
 
-            return _mapper.Map<SegmentDto>(segment);
+            return CreatedAtAction("GetSegmentById", new {id = segment.Id }, 
+                _mapper.Map<SegmentDto>(segment));        
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<SegmentDto>> UpdateSegment(int id, [FromBody] SegmentDto segmentDto)
+        public async Task<ActionResult> UpdateSegment(int id, [FromBody] SegmentDto segmentDto)
         {
             var segment = _mapper.Map<Segment>(segmentDto);
 
-            if (id != segment.Id) return BadRequest();
+            if (id != segment.Id) return BadRequest(new ServerResponse(400));
 
             await _segmentService.UpdateSegment(segment);
 
@@ -73,7 +75,7 @@ namespace API.Controllers
         {
             var segment = await _segmentService.GetSegmentByIdAsync(id);
 
-            if (segment == null) return NotFound();
+            if (segment == null) return NotFound(new ServerResponse(404));
 
             await _segmentService.DeleteSegment(segment);
 

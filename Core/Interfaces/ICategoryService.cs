@@ -5,11 +5,10 @@ using Core.Entities;
 
 namespace Core.Interfaces
 {
-    public interface
-     ICategoryService
+    public interface ICategoryService
     {
-        Task<IQueryable<Category>> GetCategoriesWithSearching(QueryParameters queryParameters);
-        Task<IQueryable<Category>> GetCategoriesWithPaging(QueryParameters queryParameters);
+        Task<List<Category>> GetCategoriesWithSearchingAndPaging(QueryParameters queryParameters);
+        Task<int> GetCountForCategories();
         Task<Category> GetCategoryByIdAsync(int id);
         Task CreateCategory(Category category);
         Task UpdateCategory(Category category);

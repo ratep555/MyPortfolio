@@ -24,7 +24,7 @@ ngOnInit(): void {
 
   this.segmentForm = this.formBuilder.group({
     id: [this.id],
-    label: new FormControl('', [Validators.required])
+    label: ['', [Validators.required]]
     });
 
   this.segmentService.getSegmentById(this.id)

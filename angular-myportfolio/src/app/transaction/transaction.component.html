@@ -52,7 +52,7 @@
                           Resolved
                       </th>       
                       <th>
-                          Date
+                          Date and time
                       </th>       
                   </tr>
                       </thead>
@@ -65,7 +65,7 @@
                   <td>{{transaction.price | number: '1.2-2'}} kn</td>
                   <td>{{transaction.quantity}}</td>
                   <td>{{transaction.resolved}}</td>
-                  <td>{{transaction.date | date:"dd.MM.yyyy"}}</td>
+                  <td>{{transaction.date | date:"dd.MM.yyyy.  HH:mm"}}</td>
               </tr>
                       </tbody>    
             </table>

@@ -24,7 +24,7 @@ ngOnInit(): void {
 
   this.typeofstockForm = this.formBuilder.group({
     id: [this.id],
-    label: new FormControl('', [Validators.required])
+    label: ['', [Validators.required]]
     });
 
   this.typeofstockService.getTypeOfStockById(this.id)

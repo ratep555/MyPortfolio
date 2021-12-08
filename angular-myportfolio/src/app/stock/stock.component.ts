@@ -8,6 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
 import { AccountService } from '../account/account.service';
 import { IUser } from '../shared/models/user';
+import { ICategory } from '../shared/models/category';
 
 @Component({
   selector: 'app-stock',
@@ -16,9 +17,11 @@ import { IUser } from '../shared/models/user';
 })
 export class StockComponent implements OnInit {
   @ViewChild('search', {static: false}) searchTerm: ElementRef;
+  @ViewChild('filter', {static: false}) filterTerm: ElementRef;
   stocks: IStock[];
   myParams = new MyParams();
   totalCount: number;
+  categories: ICategory[];
 
   constructor(private stockService: StockService,
               private router: Router,
@@ -26,6 +29,7 @@ export class StockComponent implements OnInit {
 
   ngOnInit(): void {
     this.getStocks();
+    this.getCategories();
     this.onRefresh();
   }
 
@@ -42,6 +46,19 @@ export class StockComponent implements OnInit {
     );
   }
 
+  getCategories() {
+    this.stockService.getCategories().subscribe(response => {
+    this.categories = response;
+    }, error => {
+    console.log(error);
+    });
+    }
+
+  onCategorySelected(categoryIdId: number) {
+    this.myParams.categoryId = categoryIdId;
+    this.getStocks();
+    }
+
   onSearch() {
     this.myParams.query = this.searchTerm.nativeElement.value;
     this.getStocks();
@@ -49,6 +66,12 @@ export class StockComponent implements OnInit {
 
   onReset() {
     this.searchTerm.nativeElement.value = '';
+    this.myParams = new MyParams();
+    this.getStocks();
+  }
+
+  onReset1() {
+    this.filterTerm.nativeElement.value = '';
     this.myParams = new MyParams();
     this.getStocks();
   }

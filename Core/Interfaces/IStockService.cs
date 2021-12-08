@@ -8,9 +8,9 @@ namespace Core.Interfaces
 {
     public interface IStockService
     {
+        Task<List<Stock>> GetStocksWithSearchingAndPaging(QueryParameters queryParameters);
+        Task<int> GetCountForStocks();
         Task<Stock> GetStockByIdAsync(int id);
-        Task<IQueryable<Stock>> GetStocksWithSearching(QueryParameters queryParameters);
-        Task<IQueryable<Stock>> GetStocksWithPaging(QueryParameters queryParameters);
         Task CreateStock(Stock stock);
         Task UpdateStock(Stock stock);
         Task DeleteStock(Stock stock);

@@ -7,8 +7,8 @@ namespace Core.Interfaces
 {
     public interface ISurtaxService
     {
-        Task<IQueryable<Surtax>> GetSurtaxesWithSearching(QueryParameters queryParameters);
-        Task<IQueryable<Surtax>> GetSurtaxesWithPaging(QueryParameters queryParameters);
+        Task<List<Surtax>> GetSurtaxesWithSearchingAndPaging(QueryParameters queryParameters);
+        Task<int> GetCountForSurtaxes();
         Task<IEnumerable<Surtax>> ListAllSurtaxes();
         Task<Surtax> GetSurtaxByIdAsync(int id);
         Task CreateSurtax(Surtax surtax);

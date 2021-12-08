@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.ErrorHandling;
 using AutoMapper;
 using Core.Dtos;
 using Core.Entities;
@@ -26,13 +27,14 @@ namespace API.Controllers
         public async Task<ActionResult<Pagination<TypeOfStockDto>>> GetAllTypesOfStock(
             [FromQuery] QueryParameters queryParameters)
         {
-            var typesOfStock = await _typeOfStockService.GetTypesOfStockWithSearching(queryParameters);
-            var list = await _typeOfStockService.GetTypesOfStockWithPaging(queryParameters);
+            var count = await _typeOfStockService.GetCountForTypesOfStock();
+
+            var list = await _typeOfStockService.GetTypesOfStockWithSearchingAndPaging(queryParameters);
 
             var data = _mapper.Map<IEnumerable<TypeOfStockDto>>(list);
 
             return Ok(new Pagination<TypeOfStockDto>
-            (queryParameters.Page, queryParameters.PageCount, typesOfStock.Count(), data)); 
+            (queryParameters.Page, queryParameters.PageCount, count, data)); 
         }
 
         [HttpGet("{id}")]
@@ -52,15 +54,16 @@ namespace API.Controllers
 
             await _typeOfStockService.CreateTypeOfStock(typeOfStock);
 
-            return _mapper.Map<TypeOfStockDto>(typeOfStock);
+            return CreatedAtAction("GetTypeOfStockById", new {id = typeOfStock.Id }, 
+                _mapper.Map<TypeOfStockDto>(typeOfStock));         
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<TypeOfStockDto>> UpdateTypeOfStock(int id, [FromBody] TypeOfStockDto typeOfStockDto)
+        public async Task<ActionResult> UpdateTypeOfStock(int id, [FromBody] TypeOfStockDto typeOfStockDto)
         {
             var typeOfStock = _mapper.Map<TypeOfStock>(typeOfStockDto);
 
-            if (id != typeOfStock.Id) return BadRequest();
+            if (id != typeOfStock.Id) return BadRequest(new ServerResponse(400));
 
             await _typeOfStockService.UpdateTypeOfStock(typeOfStock);
 
@@ -72,7 +75,7 @@ namespace API.Controllers
         {
             var typeOfStock = await _typeOfStockService.GetTypeOfStockByIdAsync(id);
 
-            if (typeOfStock == null) return NotFound();
+            if (typeOfStock == null) return NotFound(new ServerResponse(404));
 
             await _typeOfStockService.DeleteTypeOfStock(typeOfStock);
 

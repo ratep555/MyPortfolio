@@ -21,6 +21,9 @@ export class StockService {
 
   getStocks(myparams: MyParams) {
     let params = new HttpParams();
+    if (myparams.categoryId !== 0) {
+      params = params.append('categoryId', myparams.categoryId.toString());
+    }
     if (myparams.query) {
       params = params.append('query', myparams.query);
     }

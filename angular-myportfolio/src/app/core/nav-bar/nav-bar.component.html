@@ -26,7 +26,6 @@
         <a class="nav-link"routerLink="/annual/taxliability" routerLinkActive="active">Tax Liability</a>
       </li>
     </ul>
-
     <div>
     <ul class="nav navbar-nav">
       <li *ngIf="(currentUser$ | async) === null" class="nav-item">
@@ -60,7 +59,7 @@
             <a routerLink="/typesofstock" href="#" class="dropdown-item">
               <i class="fa fa-list mr-3"></i> Types </a>                
             <a routerLink="/users" href="#" class="dropdown-item">
-              <i class="fa fa-user mr-3"></i> Users </a>                             
+              <i class="fa fa-user mr-3 ml-1"></i> Users </a>                             
             <a (click)='logout()' class="dropdown-item">
               <i class="fa fa-sign-out mr-3"></i> Logout</a>
         </div>

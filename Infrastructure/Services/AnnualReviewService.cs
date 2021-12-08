@@ -19,7 +19,7 @@ namespace Infrastructure.Services
             _context = context;
         }
 
-        public async Task<IQueryable<AnnualProfitOrLoss>> GetAnnualProfitOrLossWithSearching(
+        public IQueryable<AnnualProfitOrLoss> GetAnnualProfitOrLossWithSearching(
             QueryParameters queryParameters, string email)
         {
             IQueryable<AnnualProfitOrLoss> annualProfitOrLoss = _context.AnnualProfitsOrLosses
@@ -32,18 +32,24 @@ namespace Infrastructure.Services
                 .Where(t => t.Year.ToString().Contains(queryParameters.Query));            
             }
             
-            return await Task.FromResult(annualProfitOrLoss);        
+            return annualProfitOrLoss;        
         }
 
-        public async Task<IQueryable<AnnualProfitOrLoss>> GetAnnualProfitOrLossWithPaging(
-            QueryParameters queryParameters, string email)
+        public async Task<List<AnnualProfitOrLoss>> ReturnList(QueryParameters queryParameters, string email)
         {
-            var annualProfitOrLoss = await GetAnnualProfitOrLossWithSearching(queryParameters, email);
-
+            IQueryable<AnnualProfitOrLoss> annualProfitOrLoss = GetAnnualProfitOrLossWithSearching
+                                                                (queryParameters, email);
+            
+            if (queryParameters.HasQuery())
+            {
+                annualProfitOrLoss = annualProfitOrLoss
+                .Where(t => t.Year.ToString().Contains(queryParameters.Query));            
+            }
+            
             annualProfitOrLoss = annualProfitOrLoss.Skip(queryParameters.PageCount * (queryParameters.Page - 1))
                                  .Take(queryParameters.PageCount);
-            
-            return await Task.FromResult(annualProfitOrLoss);     
+
+            return await annualProfitOrLoss.ToListAsync();
         }
 
         public async Task ActionsRegardingProfitOrLossCardUponLogin(string email)
@@ -345,7 +351,7 @@ namespace Infrastructure.Services
                 basket += totalNetProfitOrLoss;                         
             }
 
-            return await Task.FromResult(basket);
+            return basket;
         }
 
         private decimal SumOfFirstTransactions(IEnumerable<StockTransaction> stockTransactions, int max)

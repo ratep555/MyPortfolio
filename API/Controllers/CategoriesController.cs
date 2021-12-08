@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.ErrorHandling;
 using AutoMapper;
 using Core.Dtos;
 using Core.Entities;
@@ -26,13 +27,13 @@ namespace API.Controllers
         public async Task<ActionResult<Pagination<CategoryDto>>> GetAllCategories(
             [FromQuery] QueryParameters queryParameters)
         {
-            var categories = await _categoryService.GetCategoriesWithSearching(queryParameters);
-            var list = await _categoryService.GetCategoriesWithPaging(queryParameters);
+            var count = await _categoryService.GetCountForCategories();
+            var list = await _categoryService.GetCategoriesWithSearchingAndPaging(queryParameters);
 
             var data = _mapper.Map<IEnumerable<CategoryDto>>(list);
 
             return Ok(new Pagination<CategoryDto>
-            (queryParameters.Page, queryParameters.PageCount, categories.Count(), data));
+            (queryParameters.Page, queryParameters.PageCount, count, data));
         }
 
         [HttpGet("{id}")]
@@ -40,7 +41,7 @@ namespace API.Controllers
         {
             var category = await _categoryService.GetCategoryByIdAsync(id);
 
-            if (category == null) return NotFound();
+            if (category == null) return NotFound(new ServerResponse(404));
 
             return _mapper.Map<CategoryDto>(category);
         }
@@ -52,15 +53,16 @@ namespace API.Controllers
 
             await _categoryService.CreateCategory(category);
 
-            return _mapper.Map<CategoryDto>(category);
+            return CreatedAtAction("GetCategoryById", new {id = category.Id }, 
+                _mapper.Map<CategoryDto>(category));        
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<CategoryDto>> UpdateCategory(int id, [FromBody] CategoryDto categoryDto)
+        public async Task<ActionResult> UpdateCategory(int id, [FromBody] CategoryDto categoryDto)
         {
             var category = _mapper.Map<Category>(categoryDto);
 
-            if (id != category.Id) return BadRequest();
+            if (id != category.Id) return BadRequest(new ServerResponse(400));
 
             await _categoryService.UpdateCategory(category);
 
@@ -72,7 +74,7 @@ namespace API.Controllers
         {
             var category = await _categoryService.GetCategoryByIdAsync(id);
 
-            if (category == null) return NotFound();
+            if (category == null) return NotFound(new ServerResponse(404));
 
             await _categoryService.DeleteCategory(category);
 

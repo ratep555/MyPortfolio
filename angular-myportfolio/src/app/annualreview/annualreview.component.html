@@ -3,7 +3,9 @@
         <h3>There is no profit or loss!</h3> 
     </div>
     <div class="text-center" *ngIf="totalCount > 0">
-        <app-charts></app-charts>
+        <div id='chart_div' style='width: 50%; height: 300px;'>
+            <app-charts></app-charts>
+        </div>             
         <br/>
         <br/>
         <div class="form-inline pull-right">
@@ -46,6 +48,5 @@
             (pageChanged)="onPageChanged($event)"
             ></app-pager>
         </div>
-    </div>
-   
+    </div>  
 </div>
