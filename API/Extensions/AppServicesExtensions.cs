@@ -21,6 +21,8 @@ namespace API.Extensions
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<ITransactionService, TransactionService>();
             services.AddScoped<IAnnualReviewService, AnnualReviewService>();
+            services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IGoogleAuthService, GoogleAuthService>();
 
             services.Configure<ApiBehaviorOptions>(options =>
             {

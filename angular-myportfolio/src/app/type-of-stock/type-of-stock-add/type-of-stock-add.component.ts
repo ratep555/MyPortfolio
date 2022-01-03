@@ -28,7 +28,6 @@ export class TypeOfStockAddComponent implements OnInit {
 
   onSubmit() {
     this.typeofstockService.createTypeOfStock(this.typeofstockForm.value).subscribe(() => {
-      this.resetForm(this.typeofstockForm);
       this.router.navigateByUrl('typesofstock');
     },
     error => {
@@ -36,9 +35,5 @@ export class TypeOfStockAddComponent implements OnInit {
     });
   }
 
-  resetForm(form: FormGroup) {
-    form.reset();
-    this.typeofstockService.formData = new INewTypeOfStock();
-  }
 
 }

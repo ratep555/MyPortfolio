@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using Core.Entities;
 using Infrastructure.Data;
@@ -21,7 +22,10 @@ namespace API.Extensions
             builder.AddRoleManager<RoleManager<IdentityRole>>();
             builder.AddSignInManager<SignInManager<AppUser>>();
             builder.AddRoleValidator<RoleValidator<IdentityRole>>();
-            builder.AddEntityFrameworkStores<PortfolioContext>();
+            builder.AddEntityFrameworkStores<PortfolioContext>().AddDefaultTokenProviders();
+
+            services.Configure<DataProtectionTokenProviderOptions>(opt =>
+                opt.TokenLifespan = TimeSpan.FromHours(2));
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options => 

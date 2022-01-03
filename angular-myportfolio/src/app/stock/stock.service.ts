@@ -1,34 +1,57 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { MyParams } from '../shared/models/myparams';
+import { MyParams, UserParams } from '../shared/models/myparams';
 import { IPaginationForStock } from '../shared/models/pagination';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { INewStockToCreateOrEdit, IStock } from '../shared/models/stock';
 import { ICategory } from '../shared/models/category';
 import { IModality } from '../shared/models/modality';
 import { ISegment } from '../shared/models/segment';
 import { ITypeOfStock } from '../shared/models/typeOfStock';
+import { AccountService } from '../account/account.service';
+import { IUser } from '../shared/models/user';
 
 @Injectable({
   providedIn: 'root'
 })
 export class StockService {
   baseUrl = environment.apiUrl;
+  user: IUser;
+  userParams: UserParams;
   formData: INewStockToCreateOrEdit = new INewStockToCreateOrEdit();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+              private accountService: AccountService) {
+    this.accountService.currentUser$.pipe(take (1)).subscribe(user => {
+      this.user = user;
+      this.userParams = new UserParams(user);
+    });
+  }
 
-  getStocks(myparams: MyParams) {
+  getUserParams() {
+    return this.userParams;
+  }
+
+  setUserParams(params: UserParams) {
+    this.userParams = params;
+  }
+
+  resetUserParams() {
+    this.userParams = new UserParams(this.user);
+    return this.userParams;
+  }
+
+  getStocks(userParams: UserParams) {
     let params = new HttpParams();
-    if (myparams.categoryId !== 0) {
-      params = params.append('categoryId', myparams.categoryId.toString());
+    if (userParams.categoryId !== 0) {
+      params = params.append('categoryId', userParams.categoryId.toString());
     }
-    if (myparams.query) {
-      params = params.append('query', myparams.query);
+    if (userParams.query) {
+      params = params.append('query', userParams.query);
     }
-    params = params.append('page', myparams.page.toString());
-    params = params.append('pageCount', myparams.pageCount.toString());
+    params = params.append('page', userParams.page.toString());
+    params = params.append('pageCount', userParams.pageCount.toString());
     return this.http.get<IPaginationForStock>(this.baseUrl + 'stocks', {observe: 'response', params})
     .pipe(
       map(response  => {

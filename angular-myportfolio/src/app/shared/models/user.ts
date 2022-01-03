@@ -3,6 +3,7 @@ export interface IUser {
     email: string;
     token: string;
     roleName: string;
+    role: string;
   }
 
 export interface IUser1 {

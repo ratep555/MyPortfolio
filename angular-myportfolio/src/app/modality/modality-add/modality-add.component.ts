@@ -28,17 +28,11 @@ export class ModalityAddComponent implements OnInit {
 
   onSubmit() {
     this.modalityService.createModality(this.modalityForm.value).subscribe(() => {
-      this.resetForm(this.modalityForm);
       this.router.navigateByUrl('modalities');
     },
     error => {
       console.log(error);
     });
-  }
-
-  resetForm(form: FormGroup) {
-    form.reset();
-    this.modalityService.formData = new INewModality();
   }
 
 }

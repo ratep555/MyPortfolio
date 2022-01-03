@@ -6,10 +6,20 @@
               <h1 class="h3 mb-3 font-weight-normal">Login</h1>
                 </div>                     
                 <app-text-input formControlName="email" [label]="'Email Address'"></app-text-input>
-                <app-text-input formControlName="password" [label]="'Password'" [type]="'password'"></app-text-input>             
+                <app-text-input formControlName="password" [label]="'Password'" [type]="'password'"></app-text-input>  
+                <div class="kiki text-primary text-center">
+                  <a [routerLink]="['/account/forgot-password']"> Forgot Password </a>
+              </div>
                 <button [disabled]="loginForm.invalid" class="btn btn-lg btn-primary btn-block" 
                 type="submit">Sign in</button>
               </form>
+              <div class="text-center" style="margin-top: 40px; margin-bottom: 40px;">
+                <div style="padding: 20px;">
+                    <button class="btn btn-info" type="button" style="width: 100px;" (click)="externalLogin()">
+                      Google
+                    </button>
+                </div>
+            </div>
         </div>
     </div>    
         </div>

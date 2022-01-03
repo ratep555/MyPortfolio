@@ -18,8 +18,7 @@ export class TaxliabilityComponent implements OnInit {
   surtaxForm: FormGroup;
 
   constructor(private annualReviewService: AnnualreviewService,
-              private formBuilder: FormBuilder,
-              private router: Router) { }
+              private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
     this.surtaxForm = this.formBuilder.group({

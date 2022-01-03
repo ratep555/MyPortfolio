@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, AsyncValidatorFn, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { of, timer } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { AccountService } from '../account.service';
@@ -14,7 +15,9 @@ export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
   errors: string[];
 
-  constructor(private fb: FormBuilder, private accountService: AccountService, private router: Router) { }
+  constructor(private fb: FormBuilder,
+              private accountService: AccountService,
+              private toastr: ToastrService) { }
 
   ngOnInit() {
     this.createRegisterForm();
@@ -58,7 +61,7 @@ export class RegisterComponent implements OnInit {
 
   onSubmit() {
     this.accountService.register(this.registerForm.value).subscribe(response => {
-      this.router.navigateByUrl('/usertransactions');
+      this.toastr.success('Confirmation link has been sent to your mail');
     }, error => {
       console.log(error);
       this.errors = error.errors;

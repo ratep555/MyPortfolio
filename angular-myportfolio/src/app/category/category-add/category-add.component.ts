@@ -28,17 +28,11 @@ export class CategoryAddComponent implements OnInit {
 
   onSubmit() {
     this.categoryService.createCategory(this.categoryForm.value).subscribe(() => {
-      this.resetForm(this.categoryForm);
       this.router.navigateByUrl('categories');
     },
     error => {
       console.log(error);
     });
-  }
-
-  resetForm(form: FormGroup) {
-    form.reset();
-    this.categoryService.formData = new INewCategory();
   }
 
 }

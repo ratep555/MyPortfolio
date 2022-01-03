@@ -29,7 +29,6 @@ export class SurtaxAddComponent implements OnInit {
 
   onSubmit() {
     this.surtaxService.createSurtax(this.surtaxForm.value).subscribe(() => {
-      this.resetForm(this.surtaxForm);
       this.router.navigateByUrl('surtaxes');
     },
     error => {
@@ -37,10 +36,7 @@ export class SurtaxAddComponent implements OnInit {
     });
   }
 
-  resetForm(form: FormGroup) {
-    form.reset();
-    this.surtaxService.formData = new INewSurtax();
-  }
+
 }
 
 

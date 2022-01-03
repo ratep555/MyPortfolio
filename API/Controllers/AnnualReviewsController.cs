@@ -61,7 +61,7 @@ namespace API.Controllers
                 (queryParameters.Page, queryParameters.PageCount, annuals.Count(), data));
         }
         
-        [HttpPut("{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<AnnualTaxLiabilityDto>> GetTaxLiability(int id)
         {
             var email = User.RetrieveEmailFromPrincipal();

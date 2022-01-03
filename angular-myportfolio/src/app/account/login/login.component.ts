@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AccountService } from '../account.service';
+import { SocialUser } from 'angularx-social-login';
+import { ExternalAuth } from 'src/app/shared/models/externalauth';
 
 @Component({
   selector: 'app-login',
@@ -30,6 +32,30 @@ export class LoginComponent implements OnInit {
       .pattern('^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$')]],
       password: ['', [Validators.required]]
     });
+  }
+
+  public externalLogin = () => {
+    this.accountService.signInWithGoogle()
+    .then(res => {
+      const user: SocialUser = { ...res };
+      console.log(user);
+      const externalAuth: ExternalAuth = {
+        provider: user.provider,
+        idToken: user.idToken
+      };
+      this.validateExternalAuth(externalAuth);
+    }, error => console.log(error));
+  }
+
+  private validateExternalAuth(externalAuth: ExternalAuth) {
+    this.accountService.externalLogin(externalAuth)
+      .subscribe(res => {
+        this.router.navigateByUrl('/');
+      },
+      error => {
+        console.log(error);
+        this.accountService.signOutExternal();
+      });
   }
 
   onSubmit() {

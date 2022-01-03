@@ -474,7 +474,7 @@ namespace Infrastructure.Data.Migrations
             modelBuilder.Entity("Core.Entities.StockTransaction", b =>
                 {
                     b.HasOne("Core.Entities.Stock", "Stock")
-                        .WithMany()
+                        .WithMany("StockTransactions")
                         .HasForeignKey("StockId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -531,6 +531,11 @@ namespace Infrastructure.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Core.Entities.Stock", b =>
+                {
+                    b.Navigation("StockTransactions");
                 });
 #pragma warning restore 612, 618
         }

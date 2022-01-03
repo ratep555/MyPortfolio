@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { IStock } from '../shared/models/stock';
-import { MyParams } from '../shared/models/myparams';
+import { MyParams, UserParams } from '../shared/models/myparams';
 import { StockService } from './stock.service';
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2/dist/sweetalert2.js';
@@ -19,13 +19,14 @@ export class StockComponent implements OnInit {
   @ViewChild('search', {static: false}) searchTerm: ElementRef;
   @ViewChild('filter', {static: false}) filterTerm: ElementRef;
   stocks: IStock[];
-  myParams = new MyParams();
+  userParams: UserParams;
   totalCount: number;
   categories: ICategory[];
 
   constructor(private stockService: StockService,
               private router: Router,
-              private toastr: ToastrService) { }
+              private toastr: ToastrService)
+    {this.userParams = this.stockService.getUserParams(); }
 
   ngOnInit(): void {
     this.getStocks();
@@ -34,11 +35,12 @@ export class StockComponent implements OnInit {
   }
 
   getStocks() {
-    this.stockService.getStocks(this.myParams)
+    this.stockService.setUserParams(this.userParams);
+    this.stockService.getStocks(this.userParams)
     .subscribe(response => {
       this.stocks = response.data;
-      this.myParams.page = response.page;
-      this.myParams.pageCount = response.pageCount;
+      this.userParams.page = response.page;
+      this.userParams.pageCount = response.pageCount;
       this.totalCount = response.count;
     }, error => {
       console.log(error);
@@ -55,30 +57,31 @@ export class StockComponent implements OnInit {
     }
 
   onCategorySelected(categoryIdId: number) {
-    this.myParams.categoryId = categoryIdId;
+    this.userParams.categoryId = categoryIdId;
     this.getStocks();
     }
 
   onSearch() {
-    this.myParams.query = this.searchTerm.nativeElement.value;
+    this.userParams.query = this.searchTerm.nativeElement.value;
     this.getStocks();
   }
 
   onReset() {
     this.searchTerm.nativeElement.value = '';
-    this.myParams = new MyParams();
+    this.userParams = this.stockService.resetUserParams();
     this.getStocks();
   }
 
   onReset1() {
     this.filterTerm.nativeElement.value = '';
-    this.myParams = new MyParams();
+    this.userParams = this.stockService.resetUserParams();
     this.getStocks();
   }
 
   onPageChanged(event: any) {
-    if (this.myParams.page !== event) {
-      this.myParams.page = event;
+    if (this.userParams.page !== event) {
+      this.userParams.page = event;
+      this.stockService.setUserParams(this.userParams);
       this.getStocks();
     }
 }

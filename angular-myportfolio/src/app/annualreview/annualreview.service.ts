@@ -35,7 +35,7 @@ export class AnnualreviewService {
   }
 
   showTaxLiability(id: number) {
-    return this.http.put<IAnnualTaxLiability>(this.baseUrl + 'annualReviews/' + id, {});
+    return this.http.get<IAnnualTaxLiability>(this.baseUrl + 'annualReviews/' + id);
   }
 
   getSurtaxes() {

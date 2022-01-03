@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(PortfolioContext))]
-    [Migration("20211009100242_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20220102220925_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -476,7 +476,7 @@ namespace Infrastructure.Data.Migrations
             modelBuilder.Entity("Core.Entities.StockTransaction", b =>
                 {
                     b.HasOne("Core.Entities.Stock", "Stock")
-                        .WithMany()
+                        .WithMany("StockTransactions")
                         .HasForeignKey("StockId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -533,6 +533,11 @@ namespace Infrastructure.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Core.Entities.Stock", b =>
+                {
+                    b.Navigation("StockTransactions");
                 });
 #pragma warning restore 612, 618
         }

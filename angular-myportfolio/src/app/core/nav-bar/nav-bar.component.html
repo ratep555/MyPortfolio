@@ -41,11 +41,14 @@
         >Login</a>
       </li>
 
-      <div *ngIf="(currentUser$ | async) && (currentUser$ | async)?.roleName ==='Admin'" class="dropdown mr-5" dropdown>
+      <div *ngIf="(currentUser$ | async) && (currentUser$ | async)?.role ==='Admin'" class="dropdown mr-5" dropdown>
         <a href="#" class="dropdown-toggle text-white" dropdownToggle (click)="false">
-          <strong>Welcome {{(currentUser$ | async).roleName}} </strong> 
+          <strong>Welcome {{(currentUser$ | async).role}} </strong> 
         </a>
         <div class="dropdown-menu" *dropdownMenu>
+          <a routerLink="/users" href="#" class="dropdown-item">
+              <i class="fa fa-user mr-3 ml-1"></i> Users </a> 
+              <div class="dropdown-divider"></div>                     
             <a routerLink="/categories" href="#" class="dropdown-item">
               <i class="fa fa-list mr-3"></i> Categories</a>                
             <a routerLink="/modalities" href="#" class="dropdown-item">
@@ -57,20 +60,20 @@
             <a routerLink="/surtaxes" href="#" class="dropdown-item">
               <i class="fa fa-list mr-3"></i> Surtaxes </a>                
             <a routerLink="/typesofstock" href="#" class="dropdown-item">
-              <i class="fa fa-list mr-3"></i> Types </a>                
-            <a routerLink="/users" href="#" class="dropdown-item">
-              <i class="fa fa-user mr-3 ml-1"></i> Users </a>                             
+              <i class="fa fa-list mr-3"></i> Types </a>                      
+              <div class="dropdown-divider"></div>                     
             <a (click)='logout()' class="dropdown-item">
               <i class="fa fa-sign-out mr-3"></i> Logout</a>
         </div>
       </div>
-      <div *ngIf="(currentUser$ | async) && (currentUser$ | async)?.roleName !=='Admin'" class="dropdown mr-5" dropdown>
+      <div *ngIf="(currentUser$ | async) && (currentUser$ | async)?.role !=='Admin'" class="dropdown mr-5" dropdown>
         <a href="#" class="dropdown-toggle text-white" dropdownToggle (click)="false">
           <strong>Welcome {{(currentUser$ | async).displayName}} </strong> 
         </a>
         <div class="dropdown-menu" *dropdownMenu>
             <a routerLink="/annual" href="#" class="dropdown-item">
-              <i class="fa fa-list mr-3"></i> Profit/Loss List</a>                                             
+              <i class="fa fa-list mr-3"></i> Profit/Loss List</a>    
+              <div class="dropdown-divider"></div>                                                           
             <a (click)='logout()' class="dropdown-item">
               <i class="fa fa-sign-out mr-3"></i> Logout</a>
         </div>

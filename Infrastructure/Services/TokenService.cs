@@ -22,13 +22,6 @@ namespace Infrastructure.Services
 
         public string CreateToken(AppUser user)
         {
-            /*  var claims = new List<Claim>
-            {
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim(JwtRegisteredClaimNames.GivenName, user.DisplayName)
-            };
- */
-
             var claims = new List<Claim>();
 
             if (user.Email == "bob@test.com")
@@ -37,16 +30,15 @@ namespace Infrastructure.Services
                 {
                     new Claim(JwtRegisteredClaimNames.Email, user.Email),
                     new Claim(JwtRegisteredClaimNames.GivenName, user.DisplayName),
-                    new Claim(ClaimTypes.Role,"Admin")
+                    new Claim(ClaimTypes.Role, "Admin")
                 };
-            }
-            
+            }           
             else
             {
                 claims = new List<Claim>
                 {
                     new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                    new Claim(JwtRegisteredClaimNames.GivenName, user.DisplayName),
+                    new Claim(JwtRegisteredClaimNames.GivenName, user.Email),
                 };
             }           
 

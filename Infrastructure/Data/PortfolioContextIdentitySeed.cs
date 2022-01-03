@@ -25,8 +25,8 @@ namespace Infrastructure.Data
                 {
                     DisplayName = "Bob",
                     Email = "bob@test.com",
-                    UserName = "bob@test.com"
-                 
+                    UserName = "bob@test.com",
+                    EmailConfirmed = true        
                 };
 
                 IdentityResult identityResult = userManager.CreateAsync(user, "Pa$$w0rd").Result;

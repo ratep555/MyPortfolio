@@ -37,7 +37,6 @@ createStockForm() {
 onSubmit() {
   this.usertransactionsService.formData.stockId = this.stock.id;
   this.usertransactionsService.buyStock(this.stockForm.value).subscribe(() => {
-    this.resetForm(this.stockForm);
     this.router.navigateByUrl('myportfolio');
   },
   error => {
@@ -53,8 +52,4 @@ loadStock() {
   });
 }
 
-resetForm(form: FormGroup) {
-  form.reset();
-  this.usertransactionsService.formData = new INewTransaction();
-}
 }

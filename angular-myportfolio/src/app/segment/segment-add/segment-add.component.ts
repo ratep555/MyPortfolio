@@ -28,17 +28,11 @@ export class SegmentAddComponent implements OnInit {
 
   onSubmit() {
     this.segmentService.createSegment(this.segmentForm.value).subscribe(() => {
-      this.resetForm(this.segmentForm);
       this.router.navigateByUrl('segments');
     },
     error => {
       console.log(error);
     });
-  }
-
-  resetForm(form: FormGroup) {
-    form.reset();
-    this.segmentService.formData = new INewSegment();
   }
 
 }
